@@ -3,13 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Entity : MonoBehaviour {
+	private Game game;
+	public GameObject pathPrefab;
 
 	private PathRenderer pathRenderer;
 	private List<Vector2> path = new List<Vector2>();
 	
 
 	void Awake () {
-		pathRenderer = transform.Find("Path").GetComponent<PathRenderer>();
+		game = GameObject.Find("Game").GetComponent<Game>();
+
+		CreatePathRenderer();
+	}
+
+
+	private void CreatePathRenderer () {
+		GameObject obj = (GameObject)Instantiate(pathPrefab);
+		obj.transform.SetParent(game.containers.fx.transform);
+		pathRenderer  = obj.GetComponent<PathRenderer>();
 	}
 
 
@@ -23,4 +34,5 @@ public class Entity : MonoBehaviour {
 
 		pathRenderer.Render(path);
 	}
+
 }

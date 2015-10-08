@@ -1,10 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class Containers {
+	public GameObject fx;
+}
+
 public class Game : MonoBehaviour {
 	
 	public int mapWidth = 14;
 	public int mapHeight = 14;
+
+	public Containers containers = new Containers();
 
 	private Entity player;
 
