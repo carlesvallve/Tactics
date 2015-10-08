@@ -32,7 +32,8 @@ public class PathRenderer : MonoBehaviour {
 			dot.transform.localPosition = point;
 			dot.transform.SetParent(transform, false);
 
-			float sc = (i == 0 || i == path.Count -1) ? 1.5f : 0.5f;
+			//float sc = (i == 0 || i == path.Count -1) ? 1.5f : 0.75f;
+			float sc = (i == path.Count -1) ? 1.5f : 0.75f;
 			dot.transform.localScale = new Vector3(sc, sc, sc);
 			dots.Add(dot);
 
@@ -51,4 +52,5 @@ public class PathRenderer : MonoBehaviour {
 
 		dots = null;
 	}
+
 }

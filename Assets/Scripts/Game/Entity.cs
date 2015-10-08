@@ -6,6 +6,7 @@ public class Entity : MonoBehaviour {
 	private Game game;
 	public GameObject pathPrefab;
 
+	private GameObject selector;
 	private PathRenderer pathRenderer;
 	private List<Vector2> path = new List<Vector2>();
 
@@ -14,7 +15,7 @@ public class Entity : MonoBehaviour {
 
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
-
+		selector = transform.Find("Selector").gameObject;
 		CreatePathRenderer();
 	}
 
@@ -44,6 +45,8 @@ public class Entity : MonoBehaviour {
 			(int)pos.z
 		);
 
+		path.RemoveAt(0);
+
 		pathRenderer.CreatePath(path);
 	}
 
@@ -58,11 +61,8 @@ public class Entity : MonoBehaviour {
 		moving = true;
 
 		while (path.Count > 0) {
-			transform.position = new Vector3(path[0].x, 0, path[0].y);
-
-			yield return new WaitForSeconds(0.15f);
-
-			if (path == null) { yield break; }
+			Vector3 point = new Vector3(path[0].x, 0, path[0].y);
+			yield return StartCoroutine(MoveToPos(point, 0.2f));
 
 			path.RemoveAt(0);
 			pathRenderer.CreatePath(path);
@@ -70,6 +70,19 @@ public class Entity : MonoBehaviour {
 
 		path = null;
 		moving = false;
+	}
+
+
+	private IEnumerator MoveToPos(Vector3 endPos, float duration) {
+		Vector3 startPos = transform.localPosition;
+		float startTime = Time.time;
+
+		while(Time.time < startTime + duration) {
+			transform.position = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
+			yield return null;
+		}
+
+		transform.position = endPos;
 	}
 
 }
