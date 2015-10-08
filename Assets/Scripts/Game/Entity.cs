@@ -1,15 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Entity : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+	private PathRenderer pathRenderer;
+	private List<Vector2> path = new List<Vector2>();
 	
+
+	void Awake () {
+		pathRenderer = transform.Find("Path").GetComponent<PathRenderer>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+
+	public void SetPath (Vector3 pos) {
+		path = Grid.astar.SearchPath(
+			(int)transform.localPosition.x, 
+			(int)transform.localPosition.z,
+			(int)pos.x, 
+			(int)pos.z
+		);
+
+		pathRenderer.Render(path);
 	}
 }
