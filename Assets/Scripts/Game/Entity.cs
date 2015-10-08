@@ -16,6 +16,7 @@ public class Entity : MonoBehaviour {
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
 		selector = transform.Find("Selector").gameObject;
+		selector.SetActive(true);
 		CreatePathRenderer();
 	}
 

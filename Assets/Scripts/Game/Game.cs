@@ -8,17 +8,17 @@ public class Containers {
 
 public class Game : MonoBehaviour {
 	
-	public int mapWidth = 14;
-	public int mapHeight = 14;
+	
 
 	public Containers containers = new Containers();
 
+	private MapGenerator map;
 	private Entity player;
 
 	
 	void Awake () {
 		player = GameObject.Find("Player").GetComponent<Entity>();
-
+		InitMap();
 		InitGrid();
 	}
 
@@ -26,9 +26,13 @@ public class Game : MonoBehaviour {
 		UpdateControls();
 	}
 
+	private void InitMap () {
+		map = GetComponent<MapGenerator>();
+		map.Generate();
+	}
 
 	private void InitGrid () {
-        Grid.InitEmpty(mapWidth, mapHeight);
+        Grid.InitEmpty(map.width, map.height);
         print ("Grid initialized: " + Grid.xsize + "," + Grid.ysize);
 	}
 
