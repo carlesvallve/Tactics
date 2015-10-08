@@ -17,29 +17,12 @@ public class PathRenderer : MonoBehaviour {
         lineRenderer.SetWidth(0.05f, 0.05f);
         lineRenderer.enabled = false;
 	}
-	
 
-	public void Render (List<Vector2> path) {
+
+	public void CreatePath (List<Vector2> path) {
 		DestroyPath();
-		CreatePath(path);
-	}
 
-
-	private void DestroyPath () {
-		if (dots == null) { return; }
-		
-		lineRenderer.SetVertexCount(1);
-		for (int i = 0; i < dots.Count; i++) {
-			Destroy(dots[i]);
-		}
-
-		dots = null;
-	}
-
-
-	private void CreatePath (List<Vector2> path) {
 		lineRenderer.SetVertexCount(path.Count);
-
 		dots = new List<GameObject>();
 
 		for (int i = 0; i < path.Count; i++) {
@@ -55,5 +38,17 @@ public class PathRenderer : MonoBehaviour {
 
 			lineRenderer.SetPosition(i, point);
 		}
+	}
+
+
+	public void DestroyPath () {
+		if (dots == null) { return; }
+		
+		lineRenderer.SetVertexCount(1);
+		for (int i = 0; i < dots.Count; i++) {
+			Destroy(dots[i]);
+		}
+
+		dots = null;
 	}
 }
