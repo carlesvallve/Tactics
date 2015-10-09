@@ -76,6 +76,8 @@ public class Grid : MonoBehaviour {
 		Cell cell = getCell (x, y);
         return cell.type;
     }
+
+    
 	public static void setCellType(string type, int x, int y) { //, bool occupied
 		Cell cell = getCell (x, y);
         cell.type = type;
