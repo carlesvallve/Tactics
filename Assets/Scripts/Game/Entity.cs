@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Entity : MonoBehaviour {
 	private Game game;
 
+	public int movement = 3;
 	public GameObject pathPrefab;
 
 	private GameObject selector;
