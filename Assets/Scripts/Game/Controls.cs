@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Controls : MonoBehaviour {
 
+	public LayerMask layerMask;
 	private Game game;
 
 	void Awake () {
@@ -32,10 +33,10 @@ public class Controls : MonoBehaviour {
 	}
 
 	private RaycastHit GetHit(Vector3 pos) {
-		// check colliders in all layers
+		// check colliders for all layers in LayerMask
 		Ray ray = Camera.main.ScreenPointToRay(pos);
 		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(ray, out hit, 1000)) {}
+		if (Physics.Raycast(ray, out hit, 1000, layerMask)) {}
 		return hit;
 	}
 
