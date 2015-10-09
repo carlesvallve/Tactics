@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour {
 	private Game game;
+
+	//public GameObject selectorPrefab;
 	public GameObject pathPrefab;
 
 	private GameObject selector;
@@ -15,16 +17,23 @@ public class Entity : MonoBehaviour {
 
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
-		selector = transform.Find("Selector").gameObject;
-		selector.SetActive(true);
+		//selector = transform.Find("Selector").gameObject;
+		//selector.transform.Find("Sprite").localScale = new Vector3(1.5f, 1.5f, 1.5f);
+		//selector.SetActive(true);
 		CreatePathRenderer();
 	}
 
 
 	private void CreatePathRenderer () {
+		
+
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
 		obj.transform.SetParent(game.containers.fx.transform);
 		pathRenderer  = obj.GetComponent<PathRenderer>();
+
+		selector = (GameObject)Instantiate(pathRenderer.dotPrefab);
+		selector.transform.SetParent(transform);
+		selector.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 	}
 
 
