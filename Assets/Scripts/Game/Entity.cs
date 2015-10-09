@@ -80,7 +80,7 @@ public class Entity : MonoBehaviour {
 
 	private IEnumerator FollowPathAnim () {
 		moving = true;
-		Grid.setWalkable(transform.localPosition.x, transform.localPosition.z, true);
+		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, true);
 
 		while (path.Count > 0) {
 			Vector3 point = new Vector3(path[0].x, 0, path[0].y);
@@ -91,7 +91,7 @@ public class Entity : MonoBehaviour {
 		}
 
 		moving = false;
-		Grid.setWalkable(transform.localPosition.x, transform.localPosition.z, false);
+		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
 
 		path = null;
 	}

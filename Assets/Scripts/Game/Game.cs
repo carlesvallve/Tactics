@@ -41,7 +41,7 @@ public class Game : MonoBehaviour {
 				Vector3 endPoint = new Vector3(x, 0, y);
 				RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
 				bool walkable = hit.point.y == 0;
-				Grid.setWalkable((float)x, (float)y, walkable);
+				Grid.SetWalkable((float)x, (float)y, walkable);
 			}
 		}
 	}
@@ -94,12 +94,13 @@ public class Game : MonoBehaviour {
 	}
 
 	private void TapOnPlayer (RaycastHit hit) {
-		if (player.moving) { return; }
 		SelectPlayer(hit.transform.parent.GetComponent<Entity>());
 	}
 
 
 	private void SelectPlayer (Entity player) {
+		if (player.moving) { return; }
+
 		this.player = player;
 
 		for (int i = 0; i < players.Count; i++) {

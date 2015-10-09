@@ -31,12 +31,12 @@ public class Cell {
     }
 	
 	
-	public bool getWalkable () {
+	public bool GetWalkable () {
 		return this.walkable;
 	}
 	
 	
-	public void setWalkable (bool walkable) {
+	public void SetWalkable (bool walkable) {
 		this.walkable = walkable;
 	}
 
@@ -67,28 +67,28 @@ public class Grid : MonoBehaviour {
     }
 
 	
-	public static Cell getCell(int x, int y) {
+	public static Cell GetCell(int x, int y) {
 		return arr[x, y];
 	}
 	
 	
-	public static string getCellType(int x, int y) { //, bool occupied
-		Cell cell = getCell (x, y);
+	public static string GetCellType(int x, int y) { //, bool occupied
+		Cell cell = GetCell (x, y);
         return cell.type;
     }
 
-    
-	public static void setCellType(string type, int x, int y) { //, bool occupied
-		Cell cell = getCell (x, y);
+
+	public static void SetCellType(string type, int x, int y) { //, bool occupied
+		Cell cell = GetCell (x, y);
         cell.type = type;
     }
 	
 	
-	public static bool getWalkable(float px, float py) { //, bool occupied
+	public static bool GetWalkable(float px, float py) { //, bool occupied
 		return arr[(int)px, (int)py].walkable;
 	}
 
-    public static void setWalkable(float px, float py, bool walkable) { //, bool occupied
+    public static void SetWalkable(float px, float py, bool walkable) { //, bool occupied
         int x = (int)px;
         int y = (int)py;
         arr[x, y].walkable = walkable;
@@ -96,18 +96,18 @@ public class Grid : MonoBehaviour {
 		//setOccupied (px, py, true);
     }
 	
-	public static bool getOccupied(float px, float py) { //, bool occupied
+	public static bool GetOccupied(float px, float py) { //, bool occupied
 		return arr[(int)px, (int)py].occupied;
 	}
 
-    public static void setOccupied(float px, float py, bool occupied) { //, bool occupied
+    public static void SetOccupied(float px, float py, bool occupied) { //, bool occupied
         int x = (int)px;
         int y = (int)py;
         arr[x, y].occupied = occupied;
         //arr[x, y].occupied = occupied;
     }
 
-    public static void tracePath(List<Vector2> path) {
+    public static void TracePath(List<Vector2> path) {
         string msg = "path: ";
         for (int n = 0; n < path.Count; n++) {
             msg += " -> " + path[n].x + "," + path[n].y;
