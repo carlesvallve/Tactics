@@ -36,6 +36,6 @@ public class MapGenerator : MonoBehaviour {
 	
 	
 	private void GenerateRandomCubes () {
-
+		
 	}
 }

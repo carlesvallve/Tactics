@@ -8,8 +8,6 @@ public class Containers {
 
 public class Game : MonoBehaviour {
 	
-	
-
 	public Containers containers = new Containers();
 
 	private MapGenerator map;
@@ -32,8 +30,20 @@ public class Game : MonoBehaviour {
 	}
 
 	private void InitGrid () {
+		// initialice empty grid
         Grid.InitEmpty(map.width, map.height);
         print ("Grid initialized: " + Grid.xsize + "," + Grid.ysize);
+
+        // set grid walkability
+        for (int y = 0; y < map.height - 0; y++) {
+        	for (int x = 0; x < map.width - 0; x++) {
+        		Vector3 startPoint = new Vector3(x, 10, y);
+        		Vector3 endPoint = new Vector3(x, 0, y);
+        		RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
+        		bool walkable = hit.point.y == 0;
+        		Grid.setWalkable((float)x, (float)y, walkable);
+        	}
+        }
 	}
 
 

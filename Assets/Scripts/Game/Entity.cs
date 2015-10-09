@@ -46,6 +46,10 @@ public class Entity : MonoBehaviour {
 			(int)pos.z
 		);
 
+		if (path == null || path.Count == 0) { 
+			return;
+		}
+
 		path.RemoveAt(0);
 
 		pathRenderer.CreatePath(path);
