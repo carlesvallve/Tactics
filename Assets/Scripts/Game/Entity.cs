@@ -12,27 +12,34 @@ public class Entity : MonoBehaviour {
 	private PathRenderer pathRenderer;
 	private List<Vector2> path = new List<Vector2>();
 
-	private bool moving = false;
+	public bool moving { get; private set; }
 	
 
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
-		//selector = transform.Find("Selector").gameObject;
-		//selector.transform.Find("Sprite").localScale = new Vector3(1.5f, 1.5f, 1.5f);
-		//selector.SetActive(true);
 		CreatePathRenderer();
 	}
 
 
-	private void CreatePathRenderer () {
-		
+	public void Deselect () {
+		pathRenderer.DestroyPath();
+		selector.SetActive(false);
+	}
 
+	public void Select () {
+		pathRenderer.DestroyPath();
+		selector.SetActive(true);
+	}
+
+
+	private void CreatePathRenderer () {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
 		obj.transform.SetParent(game.containers.fx.transform);
 		pathRenderer  = obj.GetComponent<PathRenderer>();
 
 		selector = (GameObject)Instantiate(pathRenderer.dotPrefab);
 		selector.transform.SetParent(transform);
+		selector.transform.localPosition = Vector3.zero;
 		selector.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 	}
 

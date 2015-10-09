@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Containers {
@@ -11,13 +12,13 @@ public class Game : MonoBehaviour {
 	public Containers containers = new Containers();
 
 	private MapGenerator map;
+	private List<Entity> players;
 	private Entity player;
-
 	
 	void Awake () {
-		player = GameObject.Find("Player").GetComponent<Entity>();
 		InitMap();
 		InitGrid();
+		InitPlayers();
 	}
 
 	void Update () {
@@ -31,19 +32,29 @@ public class Game : MonoBehaviour {
 
 	private void InitGrid () {
 		// initialice empty grid
-        Grid.InitEmpty(map.width, map.height);
-        print ("Grid initialized: " + Grid.xsize + "," + Grid.ysize);
+		Grid.InitEmpty(map.width, map.height);
 
-        // set grid walkability
-        for (int y = 0; y < map.height - 0; y++) {
-        	for (int x = 0; x < map.width - 0; x++) {
-        		Vector3 startPoint = new Vector3(x, 10, y);
-        		Vector3 endPoint = new Vector3(x, 0, y);
-        		RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
-        		bool walkable = hit.point.y == 0;
-        		Grid.setWalkable((float)x, (float)y, walkable);
-        	}
-        }
+		// set grid walkability
+		for (int y = 0; y < map.height - 0; y++) {
+			for (int x = 0; x < map.width - 0; x++) {
+				Vector3 startPoint = new Vector3(x, 10, y);
+				Vector3 endPoint = new Vector3(x, 0, y);
+				RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
+				bool walkable = hit.point.y == 0;
+				Grid.setWalkable((float)x, (float)y, walkable);
+			}
+		}
+	}
+
+	private void InitPlayers () {
+		players = new List<Entity>();
+
+		Entity[] playerComponents = FindObjectsOfType<Entity>();
+		foreach (Entity playerComponent in playerComponents) {
+			players.Add(playerComponent);
+		}
+
+		SelectPlayer(players[0]);
 	}
 
 
@@ -57,6 +68,9 @@ public class Game : MonoBehaviour {
 			switch (layerName) {
 			case "Grid":
 				TapOnGrid(hit);
+				break;
+			case "Player":
+				TapOnPlayer(hit);
 				break;
 			}
 		}
@@ -77,5 +91,21 @@ public class Game : MonoBehaviour {
 		if (pos.x < 0 || pos.z < 0 || pos.x > Grid.xsize - 1 || pos.z > Grid.ysize - 1) { return; }
 
 		player.SetPath(pos);
+	}
+
+	private void TapOnPlayer (RaycastHit hit) {
+		if (player.moving) { return; }
+		SelectPlayer(hit.transform.parent.GetComponent<Entity>());
+	}
+
+
+	private void SelectPlayer (Entity player) {
+		this.player = player;
+
+		for (int i = 0; i < players.Count; i++) {
+			players[i].Deselect();
+		}
+
+		player.Select();
 	}
 }
