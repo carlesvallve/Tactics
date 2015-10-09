@@ -18,7 +18,6 @@ public class PathRenderer : MonoBehaviour {
         lineRenderer.enabled = false;
 	}
 
-
 	public void CreatePath (List<Vector2> path) {
 		DestroyPath();
 
@@ -41,7 +40,6 @@ public class PathRenderer : MonoBehaviour {
 		}
 	}
 
-
 	public void DestroyPath () {
 		if (dots == null) { return; }
 		
@@ -52,5 +50,4 @@ public class PathRenderer : MonoBehaviour {
 
 		dots = null;
 	}
-
 }

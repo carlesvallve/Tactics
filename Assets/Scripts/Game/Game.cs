@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Containers {
+public class GameContainers {
 	public GameObject fx;
 }
 
 public class Game : MonoBehaviour {
 	
-	public Containers containers = new Containers();
+	public GameContainers containers = new GameContainers();
 
 	private MapGenerator map;
 	private List<Entity> players;
@@ -19,10 +19,6 @@ public class Game : MonoBehaviour {
 		InitMap();
 		InitGrid();
 		InitPlayers();
-	}
-
-	void Update () {
-		UpdateControls();
 	}
 
 	private void InitMap () {
@@ -57,48 +53,7 @@ public class Game : MonoBehaviour {
 		SelectPlayer(players[0]);
 	}
 
-
-	private void UpdateControls () {
-		if (Input.GetButtonDown("Fire1")) {
-			RaycastHit hit = GetHit(Input.mousePosition);
-			if (!hit.transform) { return; }
-
-			string layerName = LayerMask.LayerToName(hit.transform.gameObject.layer);
-
-			switch (layerName) {
-			case "Grid":
-				TapOnGrid(hit);
-				break;
-			case "Player":
-				TapOnPlayer(hit);
-				break;
-			}
-		}
-	}
-
-
-	private RaycastHit GetHit(Vector3 pos) {
-		// check colliders in all layers
-		Ray ray = Camera.main.ScreenPointToRay(pos);
-		RaycastHit hit = new RaycastHit();
-		if (Physics.Raycast(ray, out hit, 1000)) {}
-		return hit;
-	}
-
-
-	private void TapOnGrid (RaycastHit hit) {
-		Vector3 pos = new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z));
-		if (pos.x < 0 || pos.z < 0 || pos.x > Grid.xsize - 1 || pos.z > Grid.ysize - 1) { return; }
-
-		player.SetPath(pos);
-	}
-
-	private void TapOnPlayer (RaycastHit hit) {
-		SelectPlayer(hit.transform.parent.GetComponent<Entity>());
-	}
-
-
-	private void SelectPlayer (Entity player) {
+	public void SelectPlayer (Entity player) {
 		if (player.moving) { return; }
 
 		this.player = player;
@@ -108,5 +63,9 @@ public class Game : MonoBehaviour {
 		}
 
 		player.Select();
+	}
+
+	public void SetPlayerPath (Vector3 pos) {
+		player.SetPath(pos);
 	}
 }

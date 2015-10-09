@@ -34,8 +34,7 @@ public class MapGenerator : MonoBehaviour {
 		material.SetTextureScale("_BumpMap", vec);	
 	}
 	
-	
 	private void GenerateRandomCubes () {
-		
+
 	}
 }

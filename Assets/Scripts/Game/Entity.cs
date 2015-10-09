@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class Entity : MonoBehaviour {
 	private Game game;
 
-	//public GameObject selectorPrefab;
 	public GameObject pathPrefab;
 
 	private GameObject selector;
@@ -20,7 +19,6 @@ public class Entity : MonoBehaviour {
 		CreatePathRenderer();
 	}
 
-
 	public void Deselect () {
 		pathRenderer.DestroyPath();
 		selector.SetActive(false);
@@ -30,7 +28,6 @@ public class Entity : MonoBehaviour {
 		pathRenderer.DestroyPath();
 		selector.SetActive(true);
 	}
-
 
 	private void CreatePathRenderer () {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
@@ -42,7 +39,6 @@ public class Entity : MonoBehaviour {
 		selector.transform.localPosition = Vector3.zero;
 		selector.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 	}
-
 
 	public void SetPath (Vector3 pos) {
 		if (moving) { return; }
@@ -71,12 +67,10 @@ public class Entity : MonoBehaviour {
 		pathRenderer.CreatePath(path);
 	}
 
-
 	public void FollowPath () {
 		if (path == null) { return; }
 		StartCoroutine(FollowPathAnim());
 	}
-
 
 	private IEnumerator FollowPathAnim () {
 		moving = true;
@@ -96,7 +90,6 @@ public class Entity : MonoBehaviour {
 		path = null;
 	}
 
-
 	private IEnumerator MoveToPos(Vector3 endPos, float duration) {
 		Vector3 startPos = transform.localPosition;
 		float startTime = Time.time;
@@ -108,5 +101,4 @@ public class Entity : MonoBehaviour {
 
 		transform.position = endPos;
 	}
-
 }
