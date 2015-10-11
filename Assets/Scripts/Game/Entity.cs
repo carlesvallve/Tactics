@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Entity : MonoBehaviour {
 	private Game game;
 
-	public int movement = 3;
+	public int movement = 1;
 	public GameObject pathPrefab;
 
 	private GameObject selector;
@@ -21,12 +21,10 @@ public class Entity : MonoBehaviour {
 	}
 
 	public void Deselect () {
-		pathRenderer.DestroyPath();
 		selector.SetActive(false);
 	}
 
 	public void Select () {
-		pathRenderer.DestroyPath();
 		selector.SetActive(true);
 	}
 
@@ -34,6 +32,7 @@ public class Entity : MonoBehaviour {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
 		obj.transform.SetParent(game.containers.fx.transform);
 		pathRenderer  = obj.GetComponent<PathRenderer>();
+		pathRenderer.Init(this);
 
 		selector = (GameObject)Instantiate(pathRenderer.dotPrefab);
 		selector.transform.SetParent(transform);
@@ -60,12 +59,16 @@ public class Entity : MonoBehaviour {
 		);
 
 		if (path == null || path.Count == 0) { 
+			pathRenderer.DestroyArea();
+			pathRenderer.DestroyPath();
 			return;
 		}
 
 		path.RemoveAt(0);
 
+		pathRenderer.CreateArea(movement);
 		pathRenderer.CreatePath(path);
+
 	}
 
 	public void FollowPath () {
