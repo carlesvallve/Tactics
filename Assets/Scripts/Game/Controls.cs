@@ -6,15 +6,26 @@ public class Controls : MonoBehaviour {
 	public LayerMask layerMask;
 	private Game game;
 
+
 	void Awake () {
 		game = GetComponent<Game>();
 	}
 
+
 	void Update () {
-		UpdateControls();
+		UpdateKeyControls();
+		UpdateMouseControls();
 	}
 
-	private void UpdateControls () {
+
+	private void UpdateKeyControls () {
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			game.SelectNextPlayer();
+		}
+	}
+
+
+	private void UpdateMouseControls () {
 		if (Input.GetButtonDown("Fire1")) {
 			RaycastHit hit = GetHit(Input.mousePosition);
 			if (!hit.transform) { return; }
@@ -32,6 +43,7 @@ public class Controls : MonoBehaviour {
 		}
 	}
 
+
 	private RaycastHit GetHit(Vector3 pos) {
 		// check colliders for all layers in LayerMask
 		Ray ray = Camera.main.ScreenPointToRay(pos);
@@ -40,6 +52,7 @@ public class Controls : MonoBehaviour {
 		return hit;
 	}
 
+
 	private void TapOnGrid (RaycastHit hit) {
 		Vector3 pos = new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z));
 		if (pos.x < 0 || pos.z < 0 || pos.x > Grid.xsize - 1 || pos.z > Grid.ysize - 1) { return; }
@@ -47,7 +60,9 @@ public class Controls : MonoBehaviour {
 		game.SetPlayerPath(pos);
 	}
 
+
 	private void TapOnPlayer (RaycastHit hit) {
-		game.SelectPlayer(hit.transform.parent.GetComponent<Entity>());
+		Entity player = hit.transform.parent.GetComponent<Entity>();
+		game.SelectPlayer(player);
 	}
 }

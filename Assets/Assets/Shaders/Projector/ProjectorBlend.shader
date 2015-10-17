@@ -1,4 +1,4 @@
-﻿Shader "FX/Projector Blend"
+﻿Shader "Custom/Projector/Projector Blend"
 {
    Properties
    {

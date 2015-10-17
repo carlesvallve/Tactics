@@ -7,6 +7,7 @@ public class MapPrefabs {
 	public GameObject cube;
 }
 
+
 public class MapGenerator : MonoBehaviour {
 	public int width = 14;
 	public int height = 14;
@@ -25,6 +26,7 @@ public class MapGenerator : MonoBehaviour {
 		GenerateRandomCubes();
 	}
 
+
 	private void SetSize () {
 		floor = GameObject.Find("Floor");
 		floor.transform.localScale = new Vector3(width + 1, 0.2f, height + 1);
@@ -39,6 +41,7 @@ public class MapGenerator : MonoBehaviour {
 		material.SetTextureScale("_MainTex", vec);
 		material.SetTextureScale("_BumpMap", vec);	
 	}
+	
 	
 	private void GenerateRandomCubes () {
 		for (int i = 0; i < maxCubes; i++) {

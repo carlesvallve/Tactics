@@ -3,28 +3,61 @@ using System.Collections;
 
 public class GameCamera : MonoBehaviour {
 
-	private float speed = 0.2f;
-	private float friction = 0.9f;
-
+	public float distance = 16f;
+	
+	// track parameters
+	private GameObject target;
+	private float trackSpeed = 5f;
+	
+	// offset parameters
 	private Vector3 movement;
+	private Vector3 offset;
+	private float offsetSpeed = 0.5f;
+	private float offsetFriction = 0.85f;
 
-
+	
 	void Update () {
-		if (Input.GetKey(KeyCode.A)) {
-			movement = new Vector3(-speed, movement.y, movement.z);
-		}
-		if (Input.GetKey(KeyCode.D)) {
-			movement = new Vector3(speed, movement.y, movement.z);
-		}
-		if (Input.GetKey(KeyCode.W)) {
-			movement = new Vector3(movement.x, movement.y, speed);
-		}
-		if (Input.GetKey(KeyCode.S)) {
-			movement = new Vector3(movement.x, movement.y, -speed);
+		SetOffset();
+		TrackTarget();
+	}
+
+
+	public void SetTarget (GameObject obj) {
+		target = obj;
+		offset = Vector3.zero;
+	}
+
+
+	public void TrackTarget () {
+		if (target == null) {
+			return;
 		}
 
-		movement *= friction;
+		Vector3 pos = new Vector3(
+			target.transform.localPosition.x - distance + offset.x, 
+			distance * 1.4f, 
+			target.transform.localPosition.z - distance + offset.z
+		);
 
-		transform.Translate(movement, Space.World);
+		transform.localPosition = Vector3.Lerp(transform.localPosition, pos, Time.deltaTime * trackSpeed);
+	}
+
+
+	private void SetOffset () {
+		if (Input.GetKeyDown(KeyCode.A)) {
+			movement = new Vector3(-offsetSpeed, movement.y, movement.z);
+		}
+		if (Input.GetKeyDown(KeyCode.D)) {
+			movement = new Vector3(offsetSpeed, movement.y, movement.z);
+		}
+		if (Input.GetKeyDown(KeyCode.W)) {
+			movement = new Vector3(movement.x, movement.y, offsetSpeed);
+		}
+		if (Input.GetKeyDown(KeyCode.S)) {
+			movement = new Vector3(movement.x, movement.y, -offsetSpeed);
+		}
+
+		movement *= offsetFriction;
+		offset += movement;
 	}
 }

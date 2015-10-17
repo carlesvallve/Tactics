@@ -4,13 +4,12 @@ using System.Collections.Generic;
 
 public class PathRenderer : MonoBehaviour {
 
-	public GameObject tilePrefab;
+	//public GameObject tilePrefab;
 	public GameObject dotPrefab;
 	
 	private Entity entity;
 
-	//private List<GameObject> area;
-	private GameObject area;
+	//private GameObject area;
 	private List<GameObject> dots;
 	private LineRenderer lineRenderer;
 
@@ -23,13 +22,16 @@ public class PathRenderer : MonoBehaviour {
         lineRenderer.enabled = false;
 	}
 
+
 	public void Init (Entity entity) {
 		this.entity = entity;
 	}
 
 
-	public void CreatePath (List<Vector2> path) {
+	public void CreatePath (List<Vector2> path, int movement) {
 		DestroyPath();
+
+		movement -= 1;
 
 		lineRenderer.SetVertexCount(path.Count);
 		dots = new List<GameObject>();
@@ -41,13 +43,26 @@ public class PathRenderer : MonoBehaviour {
 			dot.transform.localPosition = point;
 			dot.transform.SetParent(transform, false);
 
-			float sc = (i == path.Count -1) ? 1.5f : 0.75f;
+			Color color = Color.grey;
+			if (i <= movement) { color = Color.yellow; }
+			if (i <= movement / 2) { color = Color.cyan; }
+
+			SpriteRenderer sprite = dot.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+			sprite.color = color;
+
+			float sc = ((i == path.Count -1 && i <= movement) || i == movement) ? 1.5f : 0.75f;
 			dot.transform.localScale = new Vector3(sc, sc, sc);
 			dots.Add(dot);
 
 			lineRenderer.SetPosition(i, point);
 		}
 	}
+
+
+	public void DestroyDot(int i) {
+		Destroy(dots[i]);
+	}
+	
 
 	public void DestroyPath () {
 		if (dots == null) { return; }
@@ -61,7 +76,7 @@ public class PathRenderer : MonoBehaviour {
 	}
 
 
-	public void CreateArea (int radius) {
+	/*public void CreateArea (int radius) {
 		DestroyArea();
 
 		area = new GameObject("Area");
@@ -85,8 +100,17 @@ public class PathRenderer : MonoBehaviour {
 				obj.transform.localPosition = pos;
 				obj.transform.SetParent(area.transform, false);
 
-				Color color = Mathf.Abs(x) <= radius && Mathf.Abs(y) <= radius? Color.cyan : Color.yellow;
-				obj.transform.Find("Sprite").GetComponent<SpriteRenderer>().color = color;
+				Color color;
+				if (Mathf.Abs(x) <= radius && Mathf.Abs(y) <= radius) {
+					color = Color.cyan;
+				} else {
+					color = Color.yellow;
+				}
+
+				SpriteRenderer spriteRenderer = obj.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+				//spriteRenderer.material = new Material(Shader.Find("Particles/Additive"));
+				//print (spriteRenderer.material);
+				spriteRenderer.color = color;
 			}
 		}
 	}
@@ -96,8 +120,5 @@ public class PathRenderer : MonoBehaviour {
 		if (area == null) { return; }
 		Destroy(area);
 		area = null;
-	}
-
-
-
+	}*/
 }

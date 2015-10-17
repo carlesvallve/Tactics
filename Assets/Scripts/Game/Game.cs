@@ -10,21 +10,32 @@ public class GameContainers {
 public class Game : MonoBehaviour {
 	
 	public GameContainers containers = new GameContainers();
+	
 
 	private MapGenerator map;
 	private List<Entity> players;
+	private int currentPlayerNum;
+	private GameCamera cam;
 	private Entity player;
 	
 	void Awake () {
 		InitMap();
 		InitGrid();
+		InitCamera();
 		InitPlayers();
 	}
+
+
+	private void InitCamera () {
+		cam = Camera.main.GetComponent<GameCamera>();
+	}
+
 
 	private void InitMap () {
 		map = GetComponent<MapGenerator>();
 		map.Generate();
 	}
+
 
 	private void InitGrid () {
 		// initialice empty grid
@@ -42,6 +53,7 @@ public class Game : MonoBehaviour {
 		}
 	}
 
+
 	private void InitPlayers () {
 		players = new List<Entity>();
 
@@ -53,6 +65,16 @@ public class Game : MonoBehaviour {
 		SelectPlayer(players[0]);
 	}
 
+	public void SelectNextPlayer () {
+		currentPlayerNum += 1;
+		if (currentPlayerNum > players.Count - 1) {
+			currentPlayerNum = 0;
+		}
+
+		SelectPlayer(players[currentPlayerNum]);
+	}
+
+
 	public void SelectPlayer (Entity player) {
 		if (player.moving) { return; }
 
@@ -63,7 +85,10 @@ public class Game : MonoBehaviour {
 		}
 
 		player.Select();
+
+		cam.SetTarget(player.gameObject);
 	}
+
 
 	public void SetPlayerPath (Vector3 pos) {
 		player.SetPath(pos);
