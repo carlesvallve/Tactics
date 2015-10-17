@@ -7,7 +7,6 @@ public class Entity : MonoBehaviour {
 
 	public int movement = 4;
 	public GameObject pathPrefab;
-	//public Material[] materials;
 
 	private GameObject selector;
 	private PathRenderer pathRenderer;
@@ -22,8 +21,6 @@ public class Entity : MonoBehaviour {
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
 		body = transform.Find("Body").gameObject;
-		//material = body.transform.GetComponent<Material>();
-		//material = materials[1];
 		CreatePathRenderer();
 		CreateSelector();
 	}
@@ -44,7 +41,6 @@ public class Entity : MonoBehaviour {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
 		obj.transform.SetParent(game.containers.fx.transform);
 		pathRenderer  = obj.GetComponent<PathRenderer>();
-		//pathRenderer.Init(this);
 	}
 
 

@@ -117,16 +117,6 @@ public class Grid : MonoBehaviour {
 
 }
 
-/*
-;===================================================================
-;A* Pathfinder (Version 1.71a) by Patrick Lester. Used by permission.
-;===================================================================
-;Last updated 06/16/03 -- Visual C++ version
-;Edited by Ramen Sama for use in Torque 5.13.06about to
-;Edited by Carles Vallve, 
- * changed to c# for use in Unity3d
- * many issues where removed/simplified for more transparent-easy use.
-*/
 
 public class Astar {
 	//Declare constants
@@ -181,7 +171,7 @@ public class Astar {
 
 	//-----------------------------------------------------------------------------
 	// Name: SearchPath
-	// Desc: Called by javascript. Calls FindPath and returns the path to javascript.
+	// Desc: Calls FindPath and returns the path to javascript.
 	//-----------------------------------------------------------------------------
 
 	public List<Vector2> SearchPath(int startingX, int startingY, int targetX, int targetY) {
@@ -195,7 +185,7 @@ public class Astar {
 
 	//-----------------------------------------------------------------------------
 	// Name: ConvertPath
-	// Desc: converts path given in format [x0,y0,x1,y1...] to a Vector2-List.
+	// Desc: Converts path given in format [x0,y0,x1,y1...] to a Vector2-List.
 	//-----------------------------------------------------------------------------
 
 	List<Vector2> ConvertPath(int[] lista) {
