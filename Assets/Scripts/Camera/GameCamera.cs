@@ -18,6 +18,7 @@ public class GameCamera : MonoBehaviour {
 	
 	void Update () {
 		SetOffset();
+		SetZoom();
 		TrackTarget();
 	}
 
@@ -59,5 +60,11 @@ public class GameCamera : MonoBehaviour {
 
 		movement *= offsetFriction;
 		offset += movement;
+	}
+
+
+	private void SetZoom () {
+		float delta = -Input.GetAxis("Mouse ScrollWheel");
+		distance += delta * 10f;
 	}
 }

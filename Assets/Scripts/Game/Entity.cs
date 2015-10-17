@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class Entity : MonoBehaviour {
 	private Game game;
+	private GameCamera cam;
 
 	public int movement = 4;
+	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
 
 	private GameObject selector;
@@ -20,9 +22,27 @@ public class Entity : MonoBehaviour {
 
 	void Awake () {
 		game = GameObject.Find("Game").GetComponent<Game>();
+		cam = Camera.main.GetComponent<GameCamera>();
 		body = transform.Find("Body").gameObject;
+		material = body.GetComponent<Renderer>().material;
 		CreatePathRenderer();
 		CreateSelector();
+	}
+
+
+	void Update () {
+		SetBodyOutline();
+	}
+
+
+	private void SetBodyOutline () {
+		float maxWidth = 0.0004f;
+		float outlineWidth = maxWidth * 16f / cam.distance;
+
+		if (outlineWidth > maxWidth) { outlineWidth = maxWidth; }
+		//if (!selector.activeSelf) { outlineWidth = 0; }
+
+		material.SetFloat("_Outline", outlineWidth); 
 	}
 
 
@@ -97,7 +117,7 @@ public class Entity : MonoBehaviour {
 
 		while (path.Count > 0) {
 			Vector3 point = new Vector3(path[0].x, 0, path[0].y);
-			yield return StartCoroutine(MoveToPos(point, 0.2f));
+			yield return StartCoroutine(MoveToPos(point, speed));
 
 			path.RemoveAt(0);
 			pathRenderer.DestroyDot(step);
