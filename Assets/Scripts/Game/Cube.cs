@@ -38,8 +38,8 @@ public class Cube : MonoBehaviour {
 
 	private void SetShieldColor (GameObject shield, Color color) {
 		color = new Color(color.r, color.g, color.b, 0.5f);
-		Material material = shield.GetComponent<SpriteRenderer>().material;
-		material.SetColor("_OutlineColor", color); 
+		SpriteRenderer sprite = shield.GetComponent<SpriteRenderer>();
+		sprite.material.SetColor("_OutlineColor", color); 
 		shield.SetActive(true);
 	}
 }

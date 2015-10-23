@@ -11,13 +11,13 @@ public class Game : MonoBehaviour {
 	
 	public GameContainers containers = new GameContainers();
 	
-
 	private MapGenerator map;
 	private List<Entity> players;
 	private int currentPlayerNum;
 	private GameCamera cam;
 	private Entity player;
 	
+
 	void Awake () {
 		InitMap();
 		InitGrid();

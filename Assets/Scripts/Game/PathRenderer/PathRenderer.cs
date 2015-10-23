@@ -25,11 +25,8 @@ public class PathRenderer : MonoBehaviour {
 		selector.transform.localPosition = Vector3.zero;
 		selector.transform.localScale = new Vector3(1, 1, 1);
 
-		//SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		//sprite.color = Color.cyan;
-
-		Material material = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>().material;
-		material.SetColor("_OutlineColor", Color.cyan); 
+		SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+		sprite.material.SetColor("_OutlineColor", Color.cyan);
 	}
 
 
