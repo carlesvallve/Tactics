@@ -23,10 +23,13 @@ public class PathRenderer : MonoBehaviour {
 		selector = (GameObject)Instantiate(selectorPrefab);
 		selector.transform.SetParent(entity.transform);
 		selector.transform.localPosition = Vector3.zero;
-		selector.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+		selector.transform.localScale = new Vector3(1, 1, 1);
 
-		SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		sprite.color = Color.cyan;
+		//SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
+		//sprite.color = Color.cyan;
+
+		Material material = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>().material;
+		material.SetColor("_OutlineColor", Color.cyan); 
 	}
 
 
@@ -56,7 +59,7 @@ public class PathRenderer : MonoBehaviour {
 			if (i <= movement / 2) { color = Color.cyan; }
 
 			// get scale
-			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 1.5f : 0.75f; // 0.1f : 0.05f; //
+			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f; // 1.5f : 0.75f; // 
 			Vector3 scale = new Vector3(sc, sc, sc);
 
 			// get goal
