@@ -10,7 +10,7 @@ public class Entity : MonoBehaviour {
 	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
 
-	private GameObject selector;
+	
 	private PathRenderer pathRenderer;
 	private List<Vector2> path = new List<Vector2>();
 
@@ -26,7 +26,6 @@ public class Entity : MonoBehaviour {
 		body = transform.Find("Body").gameObject;
 		material = body.GetComponent<Renderer>().material;
 		CreatePathRenderer();
-		CreateSelector();
 	}
 
 
@@ -48,12 +47,12 @@ public class Entity : MonoBehaviour {
 
 	public void Deselect () {
 		pathRenderer.DestroyPath();
-		selector.SetActive(false);
+		pathRenderer.DisplaySelector(false);
 	}
 
 
 	public void Select () {
-		selector.SetActive(true);
+		pathRenderer.DisplaySelector(true);
 	}
 
 
@@ -61,17 +60,7 @@ public class Entity : MonoBehaviour {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
 		obj.transform.SetParent(game.containers.fx.transform);
 		pathRenderer  = obj.GetComponent<PathRenderer>();
-	}
-
-
-	private void CreateSelector () {
-		selector = (GameObject)Instantiate(pathRenderer.dotPrefab);
-		selector.transform.SetParent(transform);
-		selector.transform.localPosition = Vector3.zero;
-		selector.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-
-		SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		sprite.color = Color.cyan;
+		pathRenderer.Init(this);
 	}
 
 

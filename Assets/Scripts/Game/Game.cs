@@ -64,6 +64,7 @@ public class Game : MonoBehaviour {
 
 		SelectPlayer(players[0]);
 	}
+	
 
 	public void SelectNextPlayer () {
 		currentPlayerNum += 1;
