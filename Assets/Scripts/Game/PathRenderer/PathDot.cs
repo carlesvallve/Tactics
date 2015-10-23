@@ -9,7 +9,7 @@ public class PathDot : MonoBehaviour {
 	public void Init (int num, Vector3 pos, Vector3 scale, Color color) {
 		sprite = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 		sprite.color = color;
-		sprite.transform.localScale = scale; //new Vector3(sc, sc, sc);
+		sprite.transform.localScale = scale;
 		transform.localPosition = pos;
 	}
 }

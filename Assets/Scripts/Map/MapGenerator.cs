@@ -47,6 +47,7 @@ public class MapGenerator : MonoBehaviour {
 		for (int i = 0; i < maxCubes; i++) {
 			GameObject cube = (GameObject)Instantiate(mapPrefabs.cube);
 			cube.transform.SetParent(mapContainer.transform);
+			cube.name = "Cube";
 
 			Vector3 pos = new Vector3(Random.Range(0, width), 0, Random.Range(0, height));
 			RaycastHit hit = Utilities.SetRay(pos + Vector3.up * 10, pos, 10);
