@@ -110,8 +110,6 @@ public class GameCamera : MonoBehaviour {
 		float lastStep = 0; //smooth step last time
 		
 		while(step < 1) { // until we're done
-		rotating = true;
-
 			step += Time.deltaTime * rate; //increase the step
 			smoothStep = Mathf.SmoothStep(0, 1, step); //get the smooth step
 			transform.RotateAround(point, axis, rotateAmount * (smoothStep - lastStep));
@@ -125,7 +123,6 @@ public class GameCamera : MonoBehaviour {
 			transform.RotateAround(point, axis,rotateAmount * (1 - lastStep));
 		}
 
-		
 		// update distance vector
 		distance = new Vector3(
 			transform.localPosition.x - point.x,
