@@ -8,6 +8,7 @@ public class Squad : MonoBehaviour {
 
 	public GameObject playerPrefab;
 	public List<Player> players;
+	public Color color;
 
 	private Player currentPlayer;
 	private int currentPlayerNum;
@@ -18,7 +19,9 @@ public class Squad : MonoBehaviour {
 	}
 
 
-	public void Init (int maxPlayers, Vector3 pos) {
+	public void Init (int maxPlayers, Vector3 pos, Color color) {
+		this.color = color;
+		
 		CreatePlayers(maxPlayers, pos);
 	}
 
@@ -47,7 +50,7 @@ public class Squad : MonoBehaviour {
 		pos = GetPlayerPos(pos);
 
 		Player player = obj.GetComponent<Player>();
-		player.Init(num, pos);
+		player.Init(num, pos, color);
 
 		return player;
 	}

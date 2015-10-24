@@ -18,16 +18,19 @@ public class Humanoid : Entity {
 	protected GameObject body;
 	protected Material material;
 
-	private int num;
+
+	public int num { get; private set; }
+	public Color color { get; private set; }
 	
 
-	public void Init (int num, Vector3 pos) {
+	public void Init (int num, Vector3 pos, Color color) {
 		game = GameObject.Find("Game").GetComponent<Game>();
 		cam = Camera.main.GetComponent<GameCamera>();
 		body = transform.Find("Body").gameObject;
 		material = body.GetComponent<Renderer>().material;
 
 		this.num = num;
+		this.color = color;
 
 		transform.localPosition = pos;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
@@ -47,9 +50,10 @@ public class Humanoid : Entity {
 
 		if (outlineWidth > maxWidth) { outlineWidth = maxWidth; }
 		//if (!selector.activeSelf) { outlineWidth = 0; }
+		//outlineWidth = 0;
 
 		material.SetFloat("_Outline", outlineWidth); 
-		material.SetColor("_OutlineColor", GameSettings.colors.cyan); 
+		material.SetColor("_OutlineColor", color); 
 	}
 
 
@@ -69,7 +73,7 @@ public class Humanoid : Entity {
 		obj.transform.SetParent(Game.containers.fx);
 		obj.name = "Path " + name;
 		pathRenderer  = obj.GetComponent<PathRenderer>();
-		pathRenderer.Init(this);
+		pathRenderer.Init(this, color);
 	}
 
 

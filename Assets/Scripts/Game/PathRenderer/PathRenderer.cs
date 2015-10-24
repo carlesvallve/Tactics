@@ -6,15 +6,19 @@ public class PathRenderer : MonoBehaviour {
 
 	public GameObject selectorPrefab;
 	public GameObject dotPrefab;
-	private List<PathDot> dots;
-
-	private Humanoid humanoid;
+	
 	private GameObject selector;
-
+	private List<PathDot> dots;
 	private List<Cube> cubeShields = new List<Cube>();
 
-	public void Init (Humanoid humanoid) {
+	private Humanoid humanoid;
+	private Color color;
+
+
+	public void Init (Humanoid humanoid, Color color) {
 		this.humanoid = humanoid;
+		this.color = color;
+
 		CreateSelector();
 	}
 
@@ -26,7 +30,7 @@ public class PathRenderer : MonoBehaviour {
 		selector.transform.localScale = new Vector3(1, 1, 1);
 
 		SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		sprite.material.SetColor("_OutlineColor", GameSettings.colors.cyan);
+		sprite.material.SetColor("_OutlineColor", color);
 	}
 
 
@@ -53,7 +57,7 @@ public class PathRenderer : MonoBehaviour {
 			// get color
 			Color color = Color.grey;
 			if (i <= movement) { color = GameSettings.colors.yellow; }
-			if (i <= movement / 2) { color = GameSettings.colors.cyan; }
+			if (i <= movement / 2) { color = this.color; } // GameSettings.colors.cyan
 
 			// get scale
 			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f; // 1.5f : 0.75f; // 

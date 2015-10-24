@@ -64,19 +64,19 @@ public class Game : MonoBehaviour {
 
 	private void InitSquads () {
 		squads = new List<Squad>();
-		squads.Add(CreateSquad(8, Vector3.zero));
+		squads.Add(CreateSquad(8, Vector3.zero, GameSettings.colors.magenta));
 		SelectSquad(0);
 	}
 
 
-	private Squad CreateSquad(int maxPlayers, Vector3 pos) {
+	private Squad CreateSquad(int maxPlayers, Vector3 pos, Color color) {
 
 		GameObject obj = (GameObject)Instantiate(squadPrefab);
 		obj.transform.SetParent(containers.grid);
 		obj.name = "Squad";
 
 		Squad squad = obj.GetComponent<Squad>();
-		squad.Init(maxPlayers, pos);
+		squad.Init(maxPlayers, pos, color);
 
 		return squad;
 	}
