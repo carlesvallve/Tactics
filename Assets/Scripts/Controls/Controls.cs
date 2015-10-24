@@ -20,7 +20,7 @@ public class Controls : MonoBehaviour {
 
 	private void UpdateKeyControls () {
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			game.SelectNextPlayer();
+			game.currentSquad.SelectNextPlayer();
 		}
 	}
 
@@ -57,12 +57,12 @@ public class Controls : MonoBehaviour {
 		Vector3 pos = new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z));
 		if (pos.x < 0 || pos.z < 0 || pos.x > Grid.xsize - 1 || pos.z > Grid.ysize - 1) { return; }
 
-		game.SetPlayerPath(pos);
+		game.currentSquad.SetPlayerPath(pos);
 	}
 
 
 	private void TapOnPlayer (RaycastHit hit) {
-		Entity player = hit.transform.parent.GetComponent<Entity>();
-		game.SelectPlayer(player);
+		Player player = hit.transform.parent.GetComponent<Player>();
+		game.currentSquad.SelectPlayer(player);
 	}
 }

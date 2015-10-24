@@ -30,15 +30,17 @@ public class GameCamera : MonoBehaviour {
 
 
 	public void TrackTarget () {
-		if (target == null) {
-			return;
-		}
+		Vector3 pos = Vector3.zero;
 
-		Vector3 pos = new Vector3(
-			target.transform.localPosition.x - distance + offset.x, 
-			distance * 1.4f, 
-			target.transform.localPosition.z - distance + offset.z
-		);
+		if (target == null) {
+			pos = new Vector3(-distance + offset.x, distance * 1.4f, - distance + offset.z);
+		} else {
+			pos = new Vector3(
+				target.transform.localPosition.x - distance + offset.x, 
+				target.transform.localPosition.y + distance * 1.4f, 
+				target.transform.localPosition.z - distance + offset.z
+			);
+		}
 
 		transform.localPosition = Vector3.Lerp(transform.localPosition, pos, Time.deltaTime * trackSpeed);
 	}

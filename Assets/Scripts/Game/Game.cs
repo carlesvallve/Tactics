@@ -4,32 +4,36 @@ using System.Collections.Generic;
 
 [System.Serializable]
 public class GameContainers {
-	public GameObject fx;
+	public Transform grid;
+	public Transform fx;
 }
 
 public class Game : MonoBehaviour {
 	
-	public GameContainers containers = new GameContainers();
+	public static GameContainers containers;
+
+	public GameContainers gameContainers = new GameContainers();
+	public GameObject squadPrefab;
 	
 	private MapGenerator map;
-	private List<Entity> players;
-	private int currentPlayerNum;
-	private GameCamera cam;
-	private Entity player;
-	
+
+	private List<Squad> squads;
+	private int currentSquadNum;
+	public Squad currentSquad { get; private set; }
+
 
 	void Awake () {
+		containers = gameContainers;
+
 		InitMap();
 		InitGrid();
-		InitCamera();
-		InitPlayers();
+		InitSquads();
 	}
 
 
-	private void InitCamera () {
-		cam = Camera.main.GetComponent<GameCamera>();
-	}
-
+	// =============================================
+	// World
+	// =============================================
 
 	private void InitMap () {
 		map = GetComponent<MapGenerator>();
@@ -54,44 +58,41 @@ public class Game : MonoBehaviour {
 	}
 
 
-	private void InitPlayers () {
-		players = new List<Entity>();
+	// =============================================
+	// Squads
+	// =============================================
 
-		Entity[] playerComponents = FindObjectsOfType<Entity>();
-		foreach (Entity playerComponent in playerComponents) {
-			players.Add(playerComponent);
-		}
-
-		SelectPlayer(players[0]);
-	}
-	
-
-	public void SelectNextPlayer () {
-		currentPlayerNum += 1;
-		if (currentPlayerNum > players.Count - 1) {
-			currentPlayerNum = 0;
-		}
-
-		SelectPlayer(players[currentPlayerNum]);
+	private void InitSquads () {
+		squads = new List<Squad>();
+		squads.Add(CreateSquad(8, Vector3.zero));
+		SelectSquad(0);
 	}
 
 
-	public void SelectPlayer (Entity player) {
-		if (player.moving) { return; }
+	private Squad CreateSquad(int maxPlayers, Vector3 pos) {
 
-		this.player = player;
+		GameObject obj = (GameObject)Instantiate(squadPrefab);
+		obj.transform.SetParent(containers.grid);
+		obj.name = "Squad";
 
-		for (int i = 0; i < players.Count; i++) {
-			players[i].Deselect();
-		}
+		Squad squad = obj.GetComponent<Squad>();
+		squad.Init(maxPlayers, pos);
 
-		player.Select();
-
-		cam.SetTarget(player.gameObject);
+		return squad;
 	}
 
 
-	public void SetPlayerPath (Vector3 pos) {
-		player.SetPath(pos);
+	private void SelectNextSquad () {
+		currentSquadNum += 1;
+		if (currentSquadNum > squads.Count - 1) {
+			currentSquadNum = 0;
+		} 
+
+		SelectSquad(currentSquadNum);
+	}
+
+	private void SelectSquad (int currentSquadNum) {
+		this.currentSquadNum = currentSquadNum;
+		currentSquad = squads[currentSquadNum];
 	}
 }

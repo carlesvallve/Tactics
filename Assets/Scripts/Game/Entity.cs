@@ -3,38 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Entity : MonoBehaviour {
-	private Game game;
-	private GameCamera cam;
+	protected Game game;
+	protected GameCamera cam;
 
 	public int movement = 4;
 	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
 
-	
-	private PathRenderer pathRenderer;
-	private List<Vector2> path = new List<Vector2>();
+	protected PathRenderer pathRenderer;
+	protected List<Vector2> path = new List<Vector2>();
 
 	public bool moving { get; private set; }
 
-	private GameObject body;
-	private Material material;
+	protected GameObject body;
+	protected Material material;
+
+	private int num;
 	
 
-	void Awake () {
+	public void Init (int num, Vector3 pos) {
 		game = GameObject.Find("Game").GetComponent<Game>();
 		cam = Camera.main.GetComponent<GameCamera>();
 		body = transform.Find("Body").gameObject;
 		material = body.GetComponent<Renderer>().material;
+
+		this.num = num;
+
+		transform.localPosition = pos;
+		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
+
 		CreatePathRenderer();
 	}
 
 
-	void Update () {
+	protected void Update () {
 		SetBodyOutline();
 	}
 
 
-	private void SetBodyOutline () {
+	protected void SetBodyOutline () {
 		float maxWidth = 0.0004f;
 		float outlineWidth = maxWidth * 16f / cam.distance;
 
@@ -57,9 +64,10 @@ public class Entity : MonoBehaviour {
 	}
 
 
-	private void CreatePathRenderer () {
+	protected void CreatePathRenderer () {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
-		obj.transform.SetParent(game.containers.fx.transform);
+		obj.transform.SetParent(Game.containers.fx);
+		obj.name = "Path " + name;
 		pathRenderer  = obj.GetComponent<PathRenderer>();
 		pathRenderer.Init(this);
 	}
@@ -99,7 +107,7 @@ public class Entity : MonoBehaviour {
 	}
 
 
-	private IEnumerator FollowPathAnim () {
+	protected IEnumerator FollowPathAnim () {
 		moving = true;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, true);
 
@@ -125,7 +133,7 @@ public class Entity : MonoBehaviour {
 	}
 
 
-	private IEnumerator MoveToPos(Vector3 endPos, float duration) {
+	protected IEnumerator MoveToPos(Vector3 endPos, float duration) {
 		Vector3 startPos = transform.localPosition;
 		float startTime = Time.time;
 
