@@ -8,20 +8,20 @@ public class PathRenderer : MonoBehaviour {
 	public GameObject dotPrefab;
 	private List<PathDot> dots;
 
-	private Entity entity;
+	private Humanoid humanoid;
 	private GameObject selector;
 
 	private List<Cube> cubeShields = new List<Cube>();
 
-	public void Init (Entity entity) {
-		this.entity = entity;
+	public void Init (Humanoid humanoid) {
+		this.humanoid = humanoid;
 		CreateSelector();
 	}
 
 
 	public void CreateSelector () {
 		selector = (GameObject)Instantiate(selectorPrefab);
-		selector.transform.SetParent(entity.transform);
+		selector.transform.SetParent(humanoid.transform);
 		selector.transform.localPosition = Vector3.zero;
 		selector.transform.localScale = new Vector3(1, 1, 1);
 
