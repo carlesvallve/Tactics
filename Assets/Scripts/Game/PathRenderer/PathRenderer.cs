@@ -7,7 +7,7 @@ public class PathRenderer : MonoBehaviour {
 	public GameObject selectorPrefab;
 	public GameObject dotPrefab;
 	
-	private GameObject selector;
+	public  GameObject selector { get; private set; }
 	private List<PathDot> dots;
 	private List<Cube> cubeShields = new List<Cube>();
 

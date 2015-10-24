@@ -125,5 +125,6 @@ ENDCG
  
 	}
  
-	Fallback "Outlined/Silhouetted Diffuse"
+	//Fallback "Outlined/Silhouetted Diffuse"
+	Fallback "VertexLit"
 }

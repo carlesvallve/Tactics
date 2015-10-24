@@ -36,24 +36,26 @@ public class Humanoid : Entity {
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
 
 		CreatePathRenderer();
-	}
-
-
-	protected void Update () {
 		SetBodyOutline();
 	}
 
 
+	protected void Update () {
+		//SetBodyOutline();
+	}
+
+
 	protected void SetBodyOutline () {
-		float maxWidth = 0.0004f;
-		float outlineWidth = maxWidth * 16f / cam.distance;
+		float outlineWidth = 0;
 
-		if (outlineWidth > maxWidth) { outlineWidth = maxWidth; }
-		//if (!selector.activeSelf) { outlineWidth = 0; }
-		//outlineWidth = 0;
+		/*if (pathRenderer.selector.activeSelf) { 
+			float maxWidth = 0.0004f;
+			outlineWidth = maxWidth * 16f / cam.distance;
+			if (outlineWidth > maxWidth) { outlineWidth = maxWidth; }
+		}*/
 
-		material.SetFloat("_Outline", outlineWidth); 
-		material.SetColor("_OutlineColor", color); 
+		if (material.HasProperty("_Outline")) { material.SetFloat("_Outline", outlineWidth); }
+		if (material.HasProperty("_OutlineColor")) { material.SetColor("_OutlineColor", color); } 
 	}
 
 
