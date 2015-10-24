@@ -42,6 +42,7 @@ public class Entity : MonoBehaviour {
 		//if (!selector.activeSelf) { outlineWidth = 0; }
 
 		material.SetFloat("_Outline", outlineWidth); 
+		material.SetColor("_OutlineColor", GameSettings.colors.cyan); 
 	}
 
 

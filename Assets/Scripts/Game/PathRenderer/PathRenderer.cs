@@ -26,7 +26,7 @@ public class PathRenderer : MonoBehaviour {
 		selector.transform.localScale = new Vector3(1, 1, 1);
 
 		SpriteRenderer sprite = selector.transform.Find("Sprite").GetComponent<SpriteRenderer>();
-		sprite.material.SetColor("_OutlineColor", Color.cyan);
+		sprite.material.SetColor("_OutlineColor", GameSettings.colors.cyan);
 	}
 
 
@@ -44,7 +44,7 @@ public class PathRenderer : MonoBehaviour {
 
 		
 		int goalNum = 0;
-		Color goalColor = Color.grey;
+		Color goalColor = GameSettings.colors.grey;
 
 		for (int i = 0; i < path.Count; i++) {
 			// get pos
@@ -52,8 +52,8 @@ public class PathRenderer : MonoBehaviour {
 
 			// get color
 			Color color = Color.grey;
-			if (i <= movement) { color = Color.yellow; }
-			if (i <= movement / 2) { color = Color.cyan; }
+			if (i <= movement) { color = GameSettings.colors.yellow; }
+			if (i <= movement / 2) { color = GameSettings.colors.cyan; }
 
 			// get scale
 			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f; // 1.5f : 0.75f; // 
