@@ -62,7 +62,7 @@ public class PathRenderer : MonoBehaviour {
 			if (i <= movement / 2) { color = this.color; } // GameSettings.colors.cyan
 
 			// get scale
-			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f; // 1.5f : 0.75f; // 
+			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f;
 			Vector3 scale = new Vector3(sc, sc, sc);
 
 			// get goal
