@@ -19,8 +19,8 @@ public class GameCamera : MonoBehaviour {
 	private int zoomMode = -1;
 
 	// offset parameters
-	private Vector3 movement;
-	private Vector3 offset;
+	public Vector3 movement { get; set; }
+	public Vector3 offset { get; set; }
 	public float offsetSpeed = 0.5f;
 	public float offsetFriction = 0.85f;
 
@@ -28,7 +28,6 @@ public class GameCamera : MonoBehaviour {
 	void LateUpdate () {
 		SetOffset();
 		SetZoom();
-		SetRotation();
 		TrackTarget();
 	}
 
@@ -58,23 +57,18 @@ public class GameCamera : MonoBehaviour {
 	}
 
 
-	private void SetOffset () {
-		if (Input.GetKeyDown(KeyCode.A)) {
-			movement = new Vector3(-offsetSpeed, movement.y, movement.z);
-		}
-		if (Input.GetKeyDown(KeyCode.D)) {
-			movement = new Vector3(offsetSpeed, movement.y, movement.z);
-		}
-		if (Input.GetKeyDown(KeyCode.W)) {
-			movement = new Vector3(movement.x, movement.y, offsetSpeed);
-		}
-		if (Input.GetKeyDown(KeyCode.S)) {
-			movement = new Vector3(movement.x, movement.y, -offsetSpeed);
-		}
+	// =======================================================
+	// Camera Pan
+	// =======================================================
 
+	private void SetOffset () {
 		movement *= offsetFriction;
 		offset += movement;
 	}
+
+	// =======================================================
+	// Camera Zoom
+	// =======================================================
 
 	public void ToggleZoom () {
 		zoomMode = -zoomMode;
@@ -92,11 +86,9 @@ public class GameCamera : MonoBehaviour {
 	}
 
 
-	private void SetRotation () {
-		if (Input.GetKeyDown(KeyCode.Z)) { RotateAroundTarget(-1); }
-		if (Input.GetKeyDown(KeyCode.C)) { RotateAroundTarget(1); }
-	}
-
+	// =======================================================
+	// Camera Rotation
+	// =======================================================
 
 	public void RotateAroundTarget(int dir) {
 		if (rotating) { return; }

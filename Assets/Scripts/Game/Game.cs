@@ -88,8 +88,15 @@ public class Game : MonoBehaviour {
 
 	private void InitSquads () {
 		squads = new List<Squad>();
-		squads.Add(CreateSquad(8, Vector3.zero, GameSettings.colors.cyan));
-		SelectSquad(0);
+		
+		squads.Add(CreateSquad(
+			2, Vector3.zero, GameSettings.colors.cyan)
+		);
+		squads.Add(CreateSquad(
+			2, new Vector3(Grid.xsize - 1, 0, Grid.ysize - 1), GameSettings.colors.red)
+		);
+
+		SelectSquadByNum(0);
 	}
 
 
@@ -106,17 +113,19 @@ public class Game : MonoBehaviour {
 	}
 
 
-	private void SelectNextSquad () {
+	public void SelectNextSquad () {
 		currentSquadNum += 1;
 		if (currentSquadNum > squads.Count - 1) {
 			currentSquadNum = 0;
 		} 
 
-		SelectSquad(currentSquadNum);
+		SelectSquadByNum(currentSquadNum);
 	}
 
-	private void SelectSquad (int currentSquadNum) {
+	public void SelectSquadByNum (int currentSquadNum) {
 		this.currentSquadNum = currentSquadNum;
 		currentSquad = squads[currentSquadNum];
+
+		currentSquad.SelectPlayerByNum(0);
 	}
 }

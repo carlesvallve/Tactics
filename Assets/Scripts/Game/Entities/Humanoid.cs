@@ -21,7 +21,7 @@ public class Humanoid : Entity {
 
 	public int num { get; private set; }
 	public Color color { get; private set; }
-	
+
 
 	public void Init (int num, Vector3 pos, Color color) {
 		game = GameObject.Find("Game").GetComponent<Game>();
@@ -146,6 +146,7 @@ public class Humanoid : Entity {
 
 		while(Time.time < startTime + duration) {
 			transform.position = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
+			cam.offset *= 0.95f;
 			yield return null;
 		}
 

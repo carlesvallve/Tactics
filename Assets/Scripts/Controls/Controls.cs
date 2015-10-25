@@ -5,10 +5,17 @@ public class Controls : MonoBehaviour {
 
 	public LayerMask layerMask;
 	private Game game;
+	private GameCamera cam;
 
+	private bool mouseIsDown = false;
+	private bool mouseHasMoved = false;
+	private Vector3 mouseLastPos;
+	private Vector3 mouseDelta;
+	
 
 	void Awake () {
 		game = GetComponent<Game>();
+		cam = Camera.main.GetComponent<GameCamera>();
 	}
 
 
@@ -19,17 +26,65 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateKeyControls () {
+		// game
+		if (Input.GetKeyDown(KeyCode.Return)) {
+			game.SelectNextSquad();
+		}
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			game.currentSquad.SelectNextPlayer();
 		}
+
+		// camera
+		if (Input.GetKeyDown(KeyCode.A)) {
+			cam.movement = new Vector3(-cam.offsetSpeed, cam.movement.y, cam.movement.z);
+		}
+		if (Input.GetKeyDown(KeyCode.D)) {
+			cam.movement = new Vector3(cam.offsetSpeed, cam.movement.y, cam.movement.z);
+		}
+		if (Input.GetKeyDown(KeyCode.W)) {
+			cam.movement = new Vector3(cam.movement.x, cam.movement.y, cam.offsetSpeed);
+		}
+		if (Input.GetKeyDown(KeyCode.S)) {
+			cam.movement = new Vector3(cam.movement.x, cam.movement.y, -cam.offsetSpeed);
+		}
+		if (Input.GetKeyDown(KeyCode.Z)) { cam.RotateAroundTarget(-1); }
+		if (Input.GetKeyDown(KeyCode.C)) { cam.RotateAroundTarget(1); }
 	}
 
 
 	private void UpdateMouseControls () {
+		// on mouse down
 		if (Input.GetButtonDown("Fire1")) {
+			mouseIsDown = true;
+			mouseHasMoved = false;
+			mouseLastPos = Input.mousePosition;
+		}
+
+		// while mouse is down
+		if (mouseIsDown) {
+			Vector2 delta = (Input.mousePosition - mouseLastPos);
+			mouseLastPos = Input.mousePosition;
+
+			mouseDelta = cam.transform.TransformDirection(new Vector3(delta.x, 0, delta.y));
+			if (mouseDelta.magnitude >= 1) {
+				mouseHasMoved = true;
+			}
+
+			cam.movement -= mouseDelta.normalized * 0.075f;
+		}
+
+		// on mouse up
+		if (Input.GetButtonUp("Fire1")) {
+			mouseIsDown = false;
+
 			if (PointerInteraction.IsPointerOverGameObject()) {
 				return;
 			}
+
+			if (mouseHasMoved) { 
+				return;
+			}
+			
 			RaycastHit hit = GetHit(Input.mousePosition);
 			if (!hit.transform) { return; }
 
@@ -45,6 +100,7 @@ public class Controls : MonoBehaviour {
 			}
 		}
 	}
+
 
 	private RaycastHit GetHit(Vector3 pos) {
 		// check colliders for all layers in LayerMask

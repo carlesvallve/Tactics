@@ -37,8 +37,6 @@ public class Squad : MonoBehaviour {
 			Player player = CreatePlayer(i, pos);
 			players.Add(player);
 		}
-
-		SelectPlayer(players[0]);
 	}
 
 
@@ -115,17 +113,26 @@ public class Squad : MonoBehaviour {
 	// =============================================
 
 	public void SelectNextPlayer () {
+		if (currentPlayer != null && currentPlayer.moving) { return; }
+
 		currentPlayerNum += 1;
 		if (currentPlayerNum > players.Count - 1) {
 			currentPlayerNum = 0;
 		}
 
-		SelectPlayer(players[currentPlayerNum]);
+		SelectPlayerByNum(currentPlayerNum);
 	}
 
 
+	public void SelectPlayerByNum (int num) {
+		SelectPlayer(players[num]);
+	}
+	
+
 	public void SelectPlayer (Player player) {
 		if (currentPlayer != null && currentPlayer.moving) { return; }
+
+		currentPlayerNum = player.num;
 		currentPlayer = player;
 
 		for (int i = 0; i < players.Count; i++) {
@@ -141,7 +148,4 @@ public class Squad : MonoBehaviour {
 		if (currentPlayer == null) { return; }
 		currentPlayer.SetPath(pos);
 	}
-
-
-
 }
