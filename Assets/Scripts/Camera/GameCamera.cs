@@ -94,7 +94,7 @@ public class GameCamera : MonoBehaviour {
 		if (rotating) { return; }
 
 		StartCoroutine(RotateAroundPoint(
-			target.transform.localPosition, 
+			target.transform.localPosition + new Vector3(offset.x, 0, offset.z), 
 			new Vector3(0,1,0), 
 			-dir * 90, 
 			rotationSpeed)
