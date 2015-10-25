@@ -90,24 +90,23 @@ public class Game : MonoBehaviour {
 		squads = new List<Squad>();
 		
 		squads.Add(CreateSquad(
-			2, Vector3.zero, GameSettings.colors.cyan)
+			2, Vector3.zero, 1, GameSettings.colors.cyan)
 		);
 		squads.Add(CreateSquad(
-			2, new Vector3(Grid.xsize - 1, 0, Grid.ysize - 1), GameSettings.colors.red)
+			6, new Vector3((Grid.xsize - 1) / 2, 0, (Grid.ysize - 1) / 2), 7, GameSettings.colors.red)
 		);
 
 		SelectSquadByNum(0);
 	}
 
 
-	private Squad CreateSquad(int maxPlayers, Vector3 pos, Color color) {
-
+	private Squad CreateSquad(int maxPlayers, Vector3 pos, int radius, Color color) {
 		GameObject obj = (GameObject)Instantiate(squadPrefab);
 		obj.transform.SetParent(containers.grid);
 		obj.name = "Squad";
 
 		Squad squad = obj.GetComponent<Squad>();
-		squad.Init(maxPlayers, pos, color);
+		squad.Init(maxPlayers, pos, radius, color);
 
 		return squad;
 	}
@@ -123,6 +122,10 @@ public class Game : MonoBehaviour {
 	}
 
 	public void SelectSquadByNum (int currentSquadNum) {
+		if (currentSquad != null) {
+			currentSquad.currentPlayer.Deselect();
+		}
+		
 		this.currentSquadNum = currentSquadNum;
 		currentSquad = squads[currentSquadNum];
 

@@ -10,7 +10,7 @@ public class Squad : MonoBehaviour {
 	public List<Player> players;
 	public Color color;
 
-	private Player currentPlayer;
+	public Player currentPlayer;
 	private int currentPlayerNum;
 
 
@@ -19,10 +19,10 @@ public class Squad : MonoBehaviour {
 	}
 
 
-	public void Init (int maxPlayers, Vector3 pos, Color color) {
+	public void Init (int maxPlayers, Vector3 pos, int radius, Color color) {
 		this.color = color;
 		
-		CreatePlayers(maxPlayers, pos);
+		CreatePlayers(maxPlayers, pos, radius);
 	}
 
 
@@ -30,22 +30,22 @@ public class Squad : MonoBehaviour {
 	// Player Creation
 	// =============================================
 
-	private void CreatePlayers (int maxPlayers, Vector3 pos) {
+	private void CreatePlayers (int maxPlayers, Vector3 pos, int radius) {
 		players = new List<Player>();
 
 		for (int i = 0; i < maxPlayers; i++) {
-			Player player = CreatePlayer(i, pos);
+			Player player = CreatePlayer(i, pos, radius);
 			players.Add(player);
 		}
 	}
 
 
-	private Player CreatePlayer (int num, Vector3 pos) {
+	private Player CreatePlayer (int num, Vector3 pos, int radius) {
 		GameObject obj = (GameObject)Instantiate(playerPrefab);
 		obj.transform.SetParent(transform);
 		obj.name = "Player" + num;
 
-		pos = GetPlayerPos(pos);
+		pos = GetPlayerPos(pos, radius);
 
 		Player player = obj.GetComponent<Player>();
 		player.Init(num, pos, color);
@@ -54,8 +54,8 @@ public class Squad : MonoBehaviour {
 	}
 
 
-	private Vector3 GetPlayerPos (Vector3 initialPos) {
-		int radius = 1;
+	private Vector3 GetPlayerPos (Vector3 initialPos, int radius) {
+		//int radius = 1;
 		Vector3 pos = Vector3.zero;
 
 		bool ok = false;
