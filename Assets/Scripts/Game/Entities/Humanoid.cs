@@ -18,17 +18,18 @@ public class Humanoid : Entity {
 	protected GameObject body;
 	protected Material material;
 
-
+	public Squad squad { get; private set; }
 	public int num { get; private set; }
 	public Color color { get; private set; }
 
 
-	public void Init (int num, Vector3 pos, Color color) {
+	public void Init (Squad squad, int num, Vector3 pos, Color color) {
 		game = GameObject.Find("Game").GetComponent<Game>();
 		cam = Camera.main.GetComponent<GameCamera>();
 		body = transform.Find("Body").gameObject;
 		material = body.GetComponent<Renderer>().material;
 
+		this.squad = squad;
 		this.num = num;
 		this.color = color;
 
@@ -151,5 +152,10 @@ public class Humanoid : Entity {
 		}
 
 		transform.position = endPos;
+	}
+
+
+	public void Aim (Player target) {
+		print ("Aiming towards " + target);
 	}
 }

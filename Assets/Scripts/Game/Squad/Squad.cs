@@ -48,7 +48,7 @@ public class Squad : MonoBehaviour {
 		pos = GetPlayerPos(pos, radius);
 
 		Player player = obj.GetComponent<Player>();
-		player.Init(num, pos, color);
+		player.Init(this, num, pos, color);
 
 		return player;
 	}

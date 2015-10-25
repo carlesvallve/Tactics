@@ -121,6 +121,10 @@ public class Controls : MonoBehaviour {
 
 	private void TapOnPlayer (RaycastHit hit) {
 		Player player = hit.transform.parent.GetComponent<Player>();
-		game.currentSquad.SelectPlayer(player);
+		if (player.squad == game.currentSquad) {
+			game.currentSquad.SelectPlayer(player);
+		} else {
+			game.currentSquad.currentPlayer.Aim(player);
+		}
 	}
 }
