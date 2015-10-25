@@ -46,7 +46,7 @@ public class Humanoid : Entity {
 
 
 	protected void SetBodyOutline () {
-		float outlineWidth = 0;
+		float outlineWidth = 0.0002f;
 
 		/*if (pathRenderer.selector.activeSelf) { 
 			float maxWidth = 0.0004f;

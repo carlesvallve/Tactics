@@ -120,7 +120,7 @@ public class Grid : MonoBehaviour {
 
 public class Astar {
 	//Declare constants
-	bool cutAcrossCorners = false; //activates-deactivates cut acroos corners functionallity
+	bool cutAcrossCorners = true; //activates-deactivates cut acroos corners functionallity
 	int mapWidth, mapHeight;
 	int onClosedList = 10;
 	const int notfinished = 0, notStarted = 0, found = 1, nonexistent = 2; // path-related constants
