@@ -22,6 +22,8 @@ public class Humanoid : Entity {
 	public int num { get; private set; }
 	public Color color { get; private set; }
 
+	public float visionRange = 5;
+
 
 	public void Init (Squad squad, int num, Vector3 pos, Color color) {
 		game = GameObject.Find("Game").GetComponent<Game>();
@@ -158,4 +160,7 @@ public class Humanoid : Entity {
 	public void Aim (Player target) {
 		print ("Aiming towards " + target);
 	}
+
+
+
 }
