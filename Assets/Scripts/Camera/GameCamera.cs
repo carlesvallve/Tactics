@@ -4,7 +4,7 @@ using System.Collections;
 public class GameCamera : MonoBehaviour {
 
 	// main parameters
-	public Vector3 distance = new Vector3(-16f, 8f, -16f);
+	public Vector3 distance = new Vector3(-16f, 16f, -16f);
 
 	// track parameters
 	private GameObject target;
@@ -16,6 +16,7 @@ public class GameCamera : MonoBehaviour {
 
 	// zoom parameters
 	public float zoomSpeed = 0.1f;
+	private int zoomMode = -1;
 
 	// offset parameters
 	private Vector3 movement;
@@ -75,6 +76,14 @@ public class GameCamera : MonoBehaviour {
 		offset += movement;
 	}
 
+	public void ToggleZoom () {
+		zoomMode = -zoomMode;
+		if (zoomMode > 0) {
+			distance *= 1.6f;
+		} else {
+			distance /= 1.6f;
+		}
+	}
 
 	private void SetZoom () {
 		float delta = -Input.GetAxis("Mouse ScrollWheel");
@@ -84,18 +93,18 @@ public class GameCamera : MonoBehaviour {
 
 
 	private void SetRotation () {
-		if (Input.GetKeyDown(KeyCode.Z)) { RotateAroundTarget(1); }
-		if (Input.GetKeyDown(KeyCode.C)) { RotateAroundTarget(-1); }
+		if (Input.GetKeyDown(KeyCode.Z)) { RotateAroundTarget(-1); }
+		if (Input.GetKeyDown(KeyCode.C)) { RotateAroundTarget(1); }
 	}
 
 
-	private void RotateAroundTarget(int dir) {
+	public void RotateAroundTarget(int dir) {
 		if (rotating) { return; }
 
 		StartCoroutine(RotateAroundPoint(
 			target.transform.localPosition, 
 			new Vector3(0,1,0), 
-			dir * 90, 
+			-dir * 90, 
 			rotationSpeed)
 		);
 	}

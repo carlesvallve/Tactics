@@ -8,6 +8,30 @@ public class GameContainers {
 	public Transform fx;
 }
 
+/*
+
+- create enemy squad
+- each cell, run vision algorithm
+- if enemy is spotted, 
+	- display enemy icon in hud
+	- reveal enemy and stop moving
+	- move enemy to new point
+
+- select enemy: set camera to shooting mode
+- play aiming anim
+
+- shoot enemy:
+	- calculate shooting trajectory and hit outcome
+	- play shooting anim
+	- if enemy is hit, play hit anim and apply damage
+
+- actions:
+	- move
+	- overwatch
+	- aim
+	- defend
+*/
+
 public class Game : MonoBehaviour {
 	
 	public static GameContainers containers;

@@ -27,6 +27,9 @@ public class Controls : MonoBehaviour {
 
 	private void UpdateMouseControls () {
 		if (Input.GetButtonDown("Fire1")) {
+			if (PointerInteraction.IsPointerOverGameObject()) {
+				return;
+			}
 			RaycastHit hit = GetHit(Input.mousePosition);
 			if (!hit.transform) { return; }
 
@@ -42,7 +45,6 @@ public class Controls : MonoBehaviour {
 			}
 		}
 	}
-
 
 	private RaycastHit GetHit(Vector3 pos) {
 		// check colliders for all layers in LayerMask

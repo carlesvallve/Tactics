@@ -120,7 +120,8 @@ public class Humanoid : Entity {
 		int step = 0;
 
 		while (path.Count > 0) {
-			Vector3 point = new Vector3(path[0].x, 0, path[0].y);
+			//Vector3 point = new Vector3(path[0].x, 0, path[0].y);
+			Vector3 point = pathRenderer.dots[step].transform.localPosition; 
 			yield return StartCoroutine(MoveToPos(point, speed));
 
 			path.RemoveAt(0);

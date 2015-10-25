@@ -11,6 +11,16 @@ public class PathDot : MonoBehaviour {
 		sprite.material.SetColor("_OutlineColor", color); 
 
 		sprite.transform.localScale = scale;
-		transform.localPosition = pos;
+
+		SetPosition(pos);
+	}
+
+
+	private void SetPosition (Vector3 pos) {
+		Vector3 startPoint = new Vector3(pos.x, 10, pos.z);
+		Vector3 endPoint = new Vector3(pos.x, 0, pos.z);
+		RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
+		
+		transform.localPosition = new Vector3(pos.x, hit.point.y, pos.z);
 	}
 }
