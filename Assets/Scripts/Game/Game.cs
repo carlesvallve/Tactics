@@ -99,7 +99,7 @@ public class Game : MonoBehaviour {
 			2, center, 1, GameSettings.colors.cyan)
 		);
 		squads.Add(CreateSquad(
-			6, center, 7, GameSettings.colors.red)
+			10, center, 7, GameSettings.colors.red)
 		);
 
 		SelectSquadByNum(0);
@@ -135,6 +135,10 @@ public class Game : MonoBehaviour {
 		this.currentSquadNum = currentSquadNum;
 		currentSquad = squads[currentSquadNum];
 
+		for (int i = 0; i < currentSquad.players.Count; i++) {
+			currentSquad.players[i].gameObject.SetActive(true);
+		}
+
 		currentSquad.SelectPlayerByNum(0);
 	}
 
@@ -161,6 +165,51 @@ public class Game : MonoBehaviour {
 			}
 		}
 
+
+		// cast 8 rays in a circle around player, to a circle around enemy
+		// if any of the rays is near enough the enemy, enemy is visible
+
+		for (int i = 0; i < enemies.Count; i++) {
+			Player enemy = enemies[i];
+			enemy.gameObject.SetActive(false);
+
+			Vector3 centerPlayer = player.transform.localPosition + Vector3.up * 0.25f;
+			Vector3 centerEnemy = enemy.transform.localPosition + Vector3.up * 0.25f;
+			RaycastHit hit = Utilities.SetRay(centerPlayer, centerEnemy, player.visionRange);
+
+			if (hit.transform) { print (hit.transform.parent); }
+
+			if (hit.transform != null && hit.transform.parent == enemy.transform) { 
+				Debug.DrawLine (centerPlayer, hit.point, Color.yellow);
+				enemy.gameObject.SetActive(true);
+				continue;
+			} else {
+				Debug.DrawLine (centerPlayer, centerEnemy, Color.magenta);
+			}
+
+			/*for (int n = 0; n < 8; n++) {
+				Vector3 startPoint = GetPointOnCircle(centerPlayer, 0.6f, n * 360 / 8);
+				Vector3 endPoint = GetPointOnCircle(centerEnemy, 0.6f, n * 360 / 8);
+				hit = Utilities.SetRay(startPoint, endPoint, player.visionRange);
+				
+				if (hit.transform != null && hit.transform.parent != enemy.transform) { 
+					Debug.DrawLine (startPoint, endPoint, Color.red);
+				} else {
+					Debug.DrawLine (startPoint, endPoint, Color.green);
+					enemy.gameObject.SetActive(true);
+				}
+			}*/
+		}
+
 		return enemies;
+	}
+
+
+	private Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
+		return new Vector3 (
+			center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad),
+			center.y,
+			center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad)
+		);
 	}
 }

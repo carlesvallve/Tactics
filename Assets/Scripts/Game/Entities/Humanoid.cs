@@ -22,7 +22,7 @@ public class Humanoid : Entity {
 	public int num { get; private set; }
 	public Color color { get; private set; }
 
-	public float visionRange = 5;
+	public float visionRange = 7;
 
 
 	public void Init (Squad squad, int num, Vector3 pos, Color color) {
