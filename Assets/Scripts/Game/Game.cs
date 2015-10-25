@@ -88,7 +88,7 @@ public class Game : MonoBehaviour {
 
 	private void InitSquads () {
 		squads = new List<Squad>();
-		squads.Add(CreateSquad(8, Vector3.zero, GameSettings.colors.magenta));
+		squads.Add(CreateSquad(8, Vector3.zero, GameSettings.colors.cyan));
 		SelectSquad(0);
 	}
 
