@@ -59,6 +59,14 @@ public class Vision : MonoBehaviour {
 
 
 	private static int CastVisionLine (Player player, Player enemy, Vector3 startPos, Vector3 endPos, bool debug) {
+		
+		// if startPos is occupied by a cube, dont even cast this line
+		RaycastHit hitUp = Utilities.SetRay(startPos + Vector3.up * 10, startPos, 10);
+		if (hitUp.transform != null && hitUp.transform.gameObject.tag == "Cube") {
+			//if (!Grid.GetWalkable(startPos.x, startPos.z)) {
+			return 0;
+		}
+		
 		float distance = Vector3.Distance(startPos, endPos);
 		RaycastHit hit = Utilities.SetRay(startPos, endPos, distance);
 				
@@ -68,7 +76,7 @@ public class Vision : MonoBehaviour {
 				color = Color.red;
 			}
 		}
-		
+
 		if (debug) {
 			player.pathRenderer.DrawLine(startPos, endPos, color); 
 		}
