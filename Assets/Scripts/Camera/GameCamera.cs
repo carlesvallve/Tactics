@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum CameraMode {
+	Normal = 1,
+	Aim = 2,
+}
+
 public class GameCamera : MonoBehaviour {
 
 	// main parameters
@@ -24,8 +29,14 @@ public class GameCamera : MonoBehaviour {
 	public float offsetSpeed = 0.5f;
 	public float offsetFriction = 0.85f;
 
+	private CameraMode cameraMode = CameraMode.Normal;
+
 
 	void LateUpdate () {
+		if (cameraMode == CameraMode.Aim) { 
+			return; 
+		}
+
 		SetOffset();
 		SetZoom();
 		TrackTarget();
@@ -132,5 +143,44 @@ public class GameCamera : MonoBehaviour {
 		);	
 
 		rotating = false;
+	}
+
+
+	public IEnumerator SetAim (Player player, Player enemy) {
+		cameraMode = CameraMode.Aim;
+
+		float duration = 1f;
+
+		Vector3 lookAtPos = enemy.transform.localPosition + Vector3.up * 0.5f;
+		player.body.transform.LookAt(
+			new Vector3(lookAtPos.x, player.transform.localPosition.y, lookAtPos.z)
+		);
+
+		Vector3 endPos = player.transform.localPosition + 
+		player.body.transform.up * 0.25f - 
+		player.body.transform.forward * 2.5f + 
+		player.body.transform.right * Random.Range(-1, 2);
+		
+		float endFov = 30;
+
+		Quaternion startRotation = transform.rotation;
+
+		float startTime = Time.time;
+
+		while(Time.time < startTime + duration) {
+			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, (Time.time - startTime) / duration);
+
+			Vector3 relativePos = lookAtPos - transform.position;
+        	Quaternion rotation = Quaternion.LookRotation(relativePos);
+    		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration); //Time.deltaTime * 8);
+			
+			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
+			yield return null;
+		}
+
+ 		transform.localPosition = endPos;
+ 		transform.LookAt(lookAtPos);
+
+ 		//cameraMode = CameraMode.Normal;
 	}
 }

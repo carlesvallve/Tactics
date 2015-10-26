@@ -70,7 +70,7 @@ public class Game : MonoBehaviour {
 		List<Player> visibleEnemies = Vision.LOS(
 			player, 
 			GetAllEnemies(),
-			true
+			false
 		);
 
 		hud.SetEnemyIcons(visibleEnemies);

@@ -15,7 +15,7 @@ public class Humanoid : Entity {
 
 	public bool moving { get; private set; }
 
-	protected GameObject body;
+	public GameObject body { get; private set; }
 	protected Material material;
 
 	public Squad squad { get; private set; }
@@ -253,7 +253,19 @@ public class Humanoid : Entity {
 	// =============================================
 
 	public void SetAim (Player target) {
-		print ("Aiming towards " + target);
+
+		/*
+		- click on a visible enemy or enemy hud icon -> OK
+		- move player body to a position where he has a clean line of vision
+		- interpolate camera into aiming mode (player -> enemy)
+		- display aiming hud over enemy (aim circle, cover level, aim percent)
+		- click next icon or press tab to switch between targets
+		*/
+
+		// camera goes at player position + small offset
+		// camera turns to look at target
+
+		StartCoroutine(cam.SetAim((Player)this, target));
 	}
 
 }
