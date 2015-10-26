@@ -55,8 +55,32 @@ public class Game : MonoBehaviour {
 	}
 
 
+	// =============================================
+	// Game Updates
+	// =============================================
+
 	void Update () {
-		CalculateVision();
+		// update vision
+		List<Player> visibleEnemies = Vision.LOS(
+			currentSquad.currentPlayer, 
+			GetAllEnemies(),
+			true
+		);
+	}
+
+
+	private List<Player> GetAllEnemies () {
+		// get list of all enemies in range
+		List<Player> enemies = new List<Player>();
+		for (int i = 0; i < squads.Count; i++) {
+			if (squads[i] == currentSquad) { continue; }
+			for (int n = 0; n < squads[i].players.Count; n++) {
+				Player enemy = squads[i].players[n];
+				enemies.Add(enemy);
+			}
+		}
+
+		return enemies;
 	}
 
 
@@ -99,7 +123,7 @@ public class Game : MonoBehaviour {
 			2, center, 1, GameSettings.colors.cyan)
 		);
 		squads.Add(CreateSquad(
-			10, center, 7, GameSettings.colors.red)
+			1, center, 4, GameSettings.colors.red)
 		);
 
 		SelectSquadByNum(0);
@@ -140,76 +164,5 @@ public class Game : MonoBehaviour {
 		}
 
 		currentSquad.SelectPlayerByNum(0);
-	}
-
-	// =============================================
-	// Vision
-	// =============================================
-
-	private List<Player> CalculateVision () {
-		Player player = currentSquad.currentPlayer;
-
-		// get list of all enemies in range
-		List<Player> enemies = new List<Player>();
-		for (int i = 0; i < squads.Count; i++) {
-			if (squads[i] == currentSquad) { continue; }
-			for (int n = 0; n < squads[i].players.Count; n++) {
-				Player enemy = squads[i].players[n];
-				float distance = Vector3.Distance(player.transform.localPosition, enemy.transform.localPosition);
-				if (distance <= player.visionRange) {
-					enemies.Add(enemy);
-					enemy.gameObject.SetActive(true);
-				} else {
-					enemy.gameObject.SetActive(false);
-				}
-			}
-		}
-
-
-		// cast 8 rays in a circle around player, to a circle around enemy
-		// if any of the rays is near enough the enemy, enemy is visible
-
-		for (int i = 0; i < enemies.Count; i++) {
-			Player enemy = enemies[i];
-			enemy.gameObject.SetActive(false);
-
-			Vector3 centerPlayer = player.transform.localPosition + Vector3.up * 0.25f;
-			Vector3 centerEnemy = enemy.transform.localPosition + Vector3.up * 0.25f;
-			RaycastHit hit = Utilities.SetRay(centerPlayer, centerEnemy, player.visionRange);
-
-			if (hit.transform) { print (hit.transform.parent); }
-
-			if (hit.transform != null && hit.transform.parent == enemy.transform) { 
-				Debug.DrawLine (centerPlayer, hit.point, Color.yellow);
-				enemy.gameObject.SetActive(true);
-				continue;
-			} else {
-				Debug.DrawLine (centerPlayer, centerEnemy, Color.magenta);
-			}
-
-			/*for (int n = 0; n < 8; n++) {
-				Vector3 startPoint = GetPointOnCircle(centerPlayer, 0.6f, n * 360 / 8);
-				Vector3 endPoint = GetPointOnCircle(centerEnemy, 0.6f, n * 360 / 8);
-				hit = Utilities.SetRay(startPoint, endPoint, player.visionRange);
-				
-				if (hit.transform != null && hit.transform.parent != enemy.transform) { 
-					Debug.DrawLine (startPoint, endPoint, Color.red);
-				} else {
-					Debug.DrawLine (startPoint, endPoint, Color.green);
-					enemy.gameObject.SetActive(true);
-				}
-			}*/
-		}
-
-		return enemies;
-	}
-
-
-	private Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
-		return new Vector3 (
-			center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad),
-			center.y,
-			center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad)
-		);
 	}
 }

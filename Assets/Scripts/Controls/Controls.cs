@@ -47,8 +47,8 @@ public class Controls : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.S)) {
 			cam.movement = new Vector3(cam.movement.x, cam.movement.y, -cam.offsetSpeed);
 		}
-		if (Input.GetKeyDown(KeyCode.Z)) { cam.RotateAroundTarget(-1); }
-		if (Input.GetKeyDown(KeyCode.C)) { cam.RotateAroundTarget(1); }
+		if (Input.GetKeyDown(KeyCode.Q)) { cam.RotateAroundTarget(-1); }
+		if (Input.GetKeyDown(KeyCode.E)) { cam.RotateAroundTarget(1); }
 	}
 
 

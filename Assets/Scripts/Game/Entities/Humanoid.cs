@@ -10,7 +10,7 @@ public class Humanoid : Entity {
 	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
 
-	protected PathRenderer pathRenderer;
+	public PathRenderer pathRenderer { get; private set; }
 	protected List<Vector2> path = new List<Vector2>();
 
 	public bool moving { get; private set; }
@@ -43,19 +43,8 @@ public class Humanoid : Entity {
 	}
 
 
-	protected void Update () {
-		//SetBodyOutline();
-	}
-
-
 	protected void SetBodyOutline () {
 		float outlineWidth = 0.0002f;
-
-		/*if (pathRenderer.selector.activeSelf) { 
-			float maxWidth = 0.0004f;
-			outlineWidth = maxWidth * 16f / cam.distance;
-			if (outlineWidth > maxWidth) { outlineWidth = maxWidth; }
-		}*/
 
 		if (material.HasProperty("_Outline")) { material.SetFloat("_Outline", outlineWidth); }
 		if (material.HasProperty("_OutlineColor")) { material.SetColor("_OutlineColor", color); } 
@@ -65,6 +54,7 @@ public class Humanoid : Entity {
 	public void Deselect () {
 		pathRenderer.DestroyPath();
 		pathRenderer.DisplaySelector(false);
+		pathRenderer.ClearLines();
 	}
 
 
@@ -160,7 +150,5 @@ public class Humanoid : Entity {
 	public void Aim (Player target) {
 		print ("Aiming towards " + target);
 	}
-
-
 
 }

@@ -144,4 +144,17 @@ public class Utilities : MonoBehaviour {
 		Explosion expl = obj.GetComponent<Explosion>();
 		expl.Init(color, normal);
 	}*/
+
+
+	// ===================================================================
+	// Others
+	// ===================================================================
+
+	private static Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
+		return new Vector3 (
+			center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad),
+			center.y,
+			center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad)
+		);
+	}
 }

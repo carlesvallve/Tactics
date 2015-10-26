@@ -6,6 +6,7 @@ public class PathRenderer : MonoBehaviour {
 
 	public GameObject selectorPrefab;
 	public GameObject dotPrefab;
+	public GameObject linePrefab;
 	
 	public  GameObject selector { get; private set; }
 	public List<PathDot> dots;
@@ -13,6 +14,8 @@ public class PathRenderer : MonoBehaviour {
 
 	private Humanoid humanoid;
 	private Color color;
+
+	private List<LineRenderer> lines = new List<LineRenderer>();
 
 
 	public void Init (Humanoid humanoid, Color color) {
@@ -22,6 +25,10 @@ public class PathRenderer : MonoBehaviour {
 		CreateSelector();
 	}
 
+
+	// =============================================
+	// Selector
+	// =============================================
 
 	public void CreateSelector () {
 		selector = (GameObject)Instantiate(selectorPrefab);
@@ -40,6 +47,10 @@ public class PathRenderer : MonoBehaviour {
 		selector.SetActive(value);
 	}
 
+
+	// =============================================
+	// Path
+	// =============================================
 
 	public void CreatePath (List<Vector2> path, int movement) {
 		DestroyPath();
@@ -109,6 +120,10 @@ public class PathRenderer : MonoBehaviour {
 	}
 
 
+	// =============================================
+	// Shields
+	// =============================================
+
 	private void SetShieldsAtPos (Vector3 pos, Color color) {
 		SetShieldInDirection(pos, new Vector3(0, 0, -1), color);
 		SetShieldInDirection(pos, new Vector3(0, 0, 1), color);
@@ -132,5 +147,33 @@ public class PathRenderer : MonoBehaviour {
 		} 
 
 		Debug.DrawLine(pos, pos + dir, Color.green, 2, false);
+	}
+
+
+	// =============================================
+	// Debug Lines
+	// =============================================
+
+	public void ClearLines () {
+		foreach (LineRenderer line in lines) {
+			Destroy(line);
+		}
+		lines.Clear();
+	}
+
+
+	public void DrawLine (Vector3 startPos, Vector3 endPos, Color color) {
+		GameObject obj = (GameObject)Instantiate(linePrefab);
+		obj.transform.SetParent(transform);
+		obj.name = "Line";
+
+		LineRenderer lineRenderer = obj.GetComponent<LineRenderer>();
+		lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
+
+        lineRenderer.SetColors(color, color);
+		lineRenderer.SetPosition(0, startPos);
+		lineRenderer.SetPosition(1, endPos);
+
+		lines.Add(lineRenderer);
 	}
 }
