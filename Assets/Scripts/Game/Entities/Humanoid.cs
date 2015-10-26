@@ -44,6 +44,9 @@ public class Humanoid : Entity {
 
 		CreatePathRenderer();
 		SetBodyOutline();
+
+		pathRenderer.SetShieldsAtPos(transform.localPosition, color);
+		SetCover();
 	}
 
 
@@ -68,8 +71,8 @@ public class Humanoid : Entity {
 
 	public void Select () {
 		pathRenderer.DisplaySelector(true);
-		pathRenderer.SetShieldsAtPos(transform.localPosition, color);
-		SetCover();
+		//pathRenderer.SetShieldsAtPos(transform.localPosition, color);
+		//SetCover();
 
 		if (OnVisionUpdated != null) {
 			OnVisionUpdated.Invoke();
@@ -214,13 +217,13 @@ public class Humanoid : Entity {
 			}
 		}
 
-		//pathRenderer.ClearShields();
+		pathRenderer.ClearShields();
 		StartCoroutine(MoveToCover(vec));
 	}
 
 
 	private IEnumerator MoveToCover (Vector3 vec, float duration = 0.1f) {
-		//pathRenderer.ClearShields();
+		
 
 		Vector3 startPos = body.transform.localPosition;
 		Vector3 endPos = new Vector3(
@@ -232,6 +235,8 @@ public class Humanoid : Entity {
 		if (body.transform.localPosition == endPos) {
 			yield break;
 		}
+
+		//pathRenderer.ClearShields();
 
 		float startTime = Time.time;
 
