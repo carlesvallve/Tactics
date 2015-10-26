@@ -61,7 +61,7 @@ public class Vision : MonoBehaviour {
 	private static int CastVisionLine (Player player, Player enemy, Vector3 startPos, Vector3 endPos, bool debug) {
 		
 		// if startPos is occupied by a cube, dont even cast this line
-		RaycastHit hitUp = Utilities.SetRay(startPos + Vector3.up * 10, startPos, 10);
+		RaycastHit hitUp = Utilities.SetRay(startPos + Vector3.up * 1.1f, startPos, 1.1f);
 		if (hitUp.transform != null && hitUp.transform.gameObject.tag == "Cube") {
 			//if (!Grid.GetWalkable(startPos.x, startPos.z)) {
 			return 0;
