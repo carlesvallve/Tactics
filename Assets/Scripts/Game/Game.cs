@@ -13,6 +13,9 @@ public class GameContainers {
 - reimplement shield logic: 
 	- each player has 4 shields in direction
 	- shields are calculated on goal tile and displayed accordingly
+	- ???
+
+	- maybe cover could be the sum of all green ision lines... ?
 
 - implement aim feature:
 	- click on a visible enemy or enemy hud icon
@@ -20,6 +23,16 @@ public class GameContainers {
 	- interpolate camera into aiming mode (player -> enemy)
 	- display aiming hud over enemy (aim circle, cover level, aim percent)
 	- click next icon or press tab to switch between targets
+
+- implement overwatch feature
+	- set player into overwatch mode
+	- when an enemy becomes visible:
+		- pause enemy movement
+		- set player into aiming mode
+		- shoot enemy
+		- if enemy can still move, resume movement
+
+
 
 */
 
