@@ -106,10 +106,7 @@ public class PathRenderer : MonoBehaviour {
 		}
 		dots = null;
 
-		for (int i = 0; i < cubeShields.Count; i++) { 
-			cubeShields[i].ResetShields(); 
-		}
-		cubeShields.Clear();
+		ClearShields();
 	}
 
 
@@ -124,7 +121,16 @@ public class PathRenderer : MonoBehaviour {
 	// Shields
 	// =============================================
 
-	private void SetShieldsAtPos (Vector3 pos, Color color) {
+	public void ClearShields () {
+		for (int i = 0; i < cubeShields.Count; i++) {
+			cubeShields[i].ResetShields(); 
+		}
+		cubeShields.Clear();
+	}
+
+
+	public void SetShieldsAtPos (Vector3 pos, Color color) {
+		//pos = new Vector3(pos.x, goalPos.y, pos.z);
 		SetShieldInDirection(pos, new Vector3(0, 0, -1), color);
 		SetShieldInDirection(pos, new Vector3(0, 0, 1), color);
 		SetShieldInDirection(pos, new Vector3(1, 0, 0), color);

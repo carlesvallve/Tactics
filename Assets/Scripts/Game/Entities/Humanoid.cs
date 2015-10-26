@@ -62,11 +62,14 @@ public class Humanoid : Entity {
 		pathRenderer.DestroyPath();
 		pathRenderer.DisplaySelector(false);
 		pathRenderer.ClearLines();
+		pathRenderer.ClearShields();
 	}
 
 
 	public void Select () {
 		pathRenderer.DisplaySelector(true);
+		pathRenderer.SetShieldsAtPos(transform.localPosition, color);
+		SetCover();
 
 		if (OnVisionUpdated != null) {
 			OnVisionUpdated.Invoke();
@@ -109,6 +112,8 @@ public class Humanoid : Entity {
 			pathRenderer.DestroyPath();
 			return;
 		}
+
+		//pathRenderer.ClearShields();
 
 		path.RemoveAt(0);
 		pathRenderer.CreatePath(path, movement);
@@ -155,7 +160,7 @@ public class Humanoid : Entity {
 		path = null;
 
 		// check for cover and move body towards it
-		SetCover (transform.localPosition - lastPos);
+		SetCover ();
 	}
 
 
@@ -181,7 +186,11 @@ public class Humanoid : Entity {
 	// Cover
 	// =============================================
 
-	protected void SetCover (Vector3 dir) {
+	protected void SetCover () {
+		if (body.transform.localPosition != new Vector3(0, body.transform.localPosition.y, 0)) {
+			return;
+		}
+
 		Vector3 vec = Vector3.zero;
 		float d = 0.25f;
 
@@ -205,11 +214,14 @@ public class Humanoid : Entity {
 			}
 		}
 
+		//pathRenderer.ClearShields();
 		StartCoroutine(MoveToCover(vec));
 	}
 
 
 	private IEnumerator MoveToCover (Vector3 vec, float duration = 0.1f) {
+		//pathRenderer.ClearShields();
+
 		Vector3 startPos = body.transform.localPosition;
 		Vector3 endPos = new Vector3(
 			vec.x, 
@@ -225,10 +237,12 @@ public class Humanoid : Entity {
 
 		while(Time.time < startTime + duration) {
 			body.transform.localPosition = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
+			pathRenderer.selector.transform.localPosition = new Vector3(body.transform.localPosition.x, pathRenderer.selector.transform.localPosition.y, body.transform.localPosition.z);
 			yield return null;
 		}
 
-		body.transform.localPosition = endPos;	
+		body.transform.localPosition = endPos;
+		pathRenderer.selector.transform.localPosition = new Vector3(body.transform.localPosition.x, pathRenderer.selector.transform.localPosition.y, body.transform.localPosition.z);
 	}
 
 

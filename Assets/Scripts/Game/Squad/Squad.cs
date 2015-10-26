@@ -38,7 +38,7 @@ public class Squad : MonoBehaviour {
 			List<Player> visibleEnemies = Vision.LOS(
 				currentPlayer, 
 				game.GetAllEnemies(),
-				true
+				false
 			);
 		};
 
