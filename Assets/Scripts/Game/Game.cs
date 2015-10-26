@@ -43,6 +43,7 @@ public class Game : MonoBehaviour {
 	public GameContainers gameContainers = new GameContainers();
 	public GameObject squadPrefab;
 	
+	private Hud hud;
 	private MapGenerator map;
 
 	private List<Squad> squads;
@@ -53,9 +54,11 @@ public class Game : MonoBehaviour {
 	void Awake () {
 		containers = gameContainers;
 
+		InitHud();
 		InitMap();
 		InitGrid();
 		InitSquads();
+		
 	}
 
 
@@ -63,7 +66,18 @@ public class Game : MonoBehaviour {
 	// General
 	// =============================================
 
-	public List<Player> GetAllEnemies () {
+	public void UpdatePlayerVision (Player player) {
+		List<Player> visibleEnemies = Vision.LOS(
+			player, 
+			GetAllEnemies(),
+			true
+		);
+
+		hud.SetEnemyIcons(visibleEnemies);
+	}
+
+
+	private List<Player> GetAllEnemies () {
 		// get list of all enemies in range
 		List<Player> enemies = new List<Player>();
 		for (int i = 0; i < squads.Count; i++) {
@@ -77,6 +91,15 @@ public class Game : MonoBehaviour {
 		return enemies;
 	}
 
+	// =============================================
+	// Hud
+	// =============================================
+
+	private void InitHud () {
+		hud = GetComponent<Hud>();
+		hud.Init(this);
+	}
+	
 
 	// =============================================
 	// World

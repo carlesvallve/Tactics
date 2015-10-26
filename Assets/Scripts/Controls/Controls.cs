@@ -124,7 +124,7 @@ public class Controls : MonoBehaviour {
 		if (player.squad == game.currentSquad) {
 			game.currentSquad.SelectPlayer(player);
 		} else {
-			game.currentSquad.currentPlayer.Aim(player);
+			game.currentSquad.currentPlayer.SetAim(player);
 		}
 	}
 }

@@ -125,6 +125,7 @@ public class PathRenderer : MonoBehaviour {
 		for (int i = 0; i < cubeShields.Count; i++) {
 			cubeShields[i].ResetShields(); 
 		}
+
 		cubeShields.Clear();
 	}
 
@@ -164,6 +165,7 @@ public class PathRenderer : MonoBehaviour {
 		foreach (LineRenderer line in lines) {
 			Destroy(line);
 		}
+		
 		lines.Clear();
 	}
 

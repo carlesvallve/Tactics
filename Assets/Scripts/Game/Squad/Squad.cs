@@ -35,14 +35,10 @@ public class Squad : MonoBehaviour {
 	private void SetPlayerHandlers (Player player) {
 		// update vision
 		player.OnVisionUpdated += () => {
-			List<Player> visibleEnemies = Vision.LOS(
-				currentPlayer, 
-				game.GetAllEnemies(),
-				true
-			);
+			game.UpdatePlayerVision(player);
 		};
-
 	}
+
 
 	private void CreatePlayers (int maxPlayers, Vector3 pos, int radius) {
 		players = new List<Player>();

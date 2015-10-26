@@ -13,7 +13,7 @@ public class Vision : MonoBehaviour {
 			Player enemy = enemies[i];
 			HideEnemy(enemy);
 
-			if (CastVisionLines(player, enemy, debug)) {
+			if (CastVisionLines(player, enemy, debug) > 0) {
 				ShowEnemy(enemy);
 				visibleEnemies.Add(enemy);
 			}
@@ -23,10 +23,15 @@ public class Vision : MonoBehaviour {
 	}
 
 
-	private static bool CastVisionLines (Player player, Player enemy, bool debug) {
+	private static int CastVisionLines (Player player, Player enemy, bool debug) {
 		// get player and enemy positions
 		Vector3 centerPlayer = player.transform.localPosition + Vector3.up * 0.5f;
 		Vector3 centerEnemy = enemy.transform.localPosition + Vector3.up * 0.5f;
+
+		float distance = Vector3.Distance(centerPlayer, centerEnemy);
+		if (distance > player.visionRange) {
+			return 0;
+		}
 
 		// get perpendicular vector
 		Vector3 forward = (centerPlayer - centerEnemy).normalized;
@@ -59,7 +64,7 @@ public class Vision : MonoBehaviour {
 		//i += CastVisionLine(player, enemy, centerPlayer + vec, centerEnemy + vec, debug);
 
 		// if at least one line is successfull, enemy will be visible
-		return i > 0;
+		return i;
 	}
 
 

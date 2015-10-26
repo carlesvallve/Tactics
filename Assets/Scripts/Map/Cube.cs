@@ -23,8 +23,6 @@ public class Cube : MonoBehaviour {
 		shieldBottom.SetActive(false);
 		shieldLeft.SetActive(false);
 		shieldRight.SetActive(false);
-
-		
 	}
 
 

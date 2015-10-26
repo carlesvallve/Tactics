@@ -71,8 +71,6 @@ public class Humanoid : Entity {
 
 	public void Select () {
 		pathRenderer.DisplaySelector(true);
-		//pathRenderer.SetShieldsAtPos(transform.localPosition, color);
-		//SetCover();
 
 		if (OnVisionUpdated != null) {
 			OnVisionUpdated.Invoke();
@@ -116,8 +114,6 @@ public class Humanoid : Entity {
 			return;
 		}
 
-		//pathRenderer.ClearShields();
-
 		path.RemoveAt(0);
 		pathRenderer.CreatePath(path, movement);
 	}
@@ -141,7 +137,6 @@ public class Humanoid : Entity {
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, true);
 
 		int step = 0;
-		Vector3 lastPos = transform.localPosition;
 
 		while (path.Count > 0) {
 			//Vector3 point = new Vector3(path[0].x, 0, path[0].y);
@@ -223,8 +218,7 @@ public class Humanoid : Entity {
 
 
 	private IEnumerator MoveToCover (Vector3 vec, float duration = 0.1f) {
-		
-
+		// get start and end positions
 		Vector3 startPos = body.transform.localPosition;
 		Vector3 endPos = new Vector3(
 			vec.x, 
@@ -232,11 +226,12 @@ public class Humanoid : Entity {
 			vec.z
 		);
 
+		// escape if we are aleady at end position
 		if (body.transform.localPosition == endPos) {
 			yield break;
 		}
 
-		//pathRenderer.ClearShields();
+		moving = true;
 
 		float startTime = Time.time;
 
@@ -248,6 +243,8 @@ public class Humanoid : Entity {
 
 		body.transform.localPosition = endPos;
 		pathRenderer.selector.transform.localPosition = new Vector3(body.transform.localPosition.x, pathRenderer.selector.transform.localPosition.y, body.transform.localPosition.z);
+	
+		moving = false;
 	}
 
 
@@ -255,7 +252,7 @@ public class Humanoid : Entity {
 	// Aim
 	// =============================================
 
-	public void Aim (Player target) {
+	public void SetAim (Player target) {
 		print ("Aiming towards " + target);
 	}
 
