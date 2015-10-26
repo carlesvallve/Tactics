@@ -10,26 +10,17 @@ public class GameContainers {
 
 /*
 
-- create enemy squad
-- each cell, run vision algorithm
-- if enemy is spotted, 
-	- display enemy icon in hud
-	- reveal enemy and stop moving
-	- move enemy to new point
+- reimplement shield logic: 
+	- each player has 4 shields in direction
+	- shields are calculated on goal tile and displayed accordingly
 
-- select enemy: set camera to shooting mode
-- play aiming anim
+- implement aim feature:
+	- click on a visible enemy or enemy hud icon
+	- move player body to a position where he has a clean line of vision
+	- interpolate camera into aiming mode (player -> enemy)
+	- display aiming hud over enemy (aim circle, cover level, aim percent)
+	- click next icon or press tab to switch between targets
 
-- shoot enemy:
-	- calculate shooting trajectory and hit outcome
-	- play shooting anim
-	- if enemy is hit, play hit anim and apply damage
-
-- actions:
-	- move
-	- overwatch
-	- aim
-	- defend
 */
 
 public class Game : MonoBehaviour {
