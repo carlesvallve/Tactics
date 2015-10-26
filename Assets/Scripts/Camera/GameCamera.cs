@@ -163,8 +163,6 @@ public class GameCamera : MonoBehaviour {
 		
 		float endFov = 30;
 
-		Quaternion startRotation = transform.rotation;
-
 		float startTime = Time.time;
 
 		while(Time.time < startTime + duration) {
