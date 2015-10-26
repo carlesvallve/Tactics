@@ -56,20 +56,10 @@ public class Game : MonoBehaviour {
 
 
 	// =============================================
-	// Game Updates
+	// General
 	// =============================================
 
-	void Update () {
-		// update vision
-		List<Player> visibleEnemies = Vision.LOS(
-			currentSquad.currentPlayer, 
-			GetAllEnemies(),
-			true
-		);
-	}
-
-
-	private List<Player> GetAllEnemies () {
+	public List<Player> GetAllEnemies () {
 		// get list of all enemies in range
 		List<Player> enemies = new List<Player>();
 		for (int i = 0; i < squads.Count; i++) {
@@ -136,7 +126,7 @@ public class Game : MonoBehaviour {
 		obj.name = "Squad";
 
 		Squad squad = obj.GetComponent<Squad>();
-		squad.Init(maxPlayers, pos, radius, color);
+		squad.Init(this, maxPlayers, pos, radius, color);
 
 		return squad;
 	}

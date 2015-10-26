@@ -24,6 +24,10 @@ public class Humanoid : Entity {
 
 	public float visionRange = 7;
 
+	// events
+	public delegate void OnVisionUpdatedHandler ();
+	public event OnVisionUpdatedHandler OnVisionUpdated;
+
 
 	public void Init (Squad squad, int num, Vector3 pos, Color color) {
 		game = GameObject.Find("Game").GetComponent<Game>();
@@ -50,6 +54,9 @@ public class Humanoid : Entity {
 		if (material.HasProperty("_OutlineColor")) { material.SetColor("_OutlineColor", color); } 
 	}
 
+	// =============================================
+	// Selection
+	// =============================================
 
 	public void Deselect () {
 		pathRenderer.DestroyPath();
@@ -60,8 +67,16 @@ public class Humanoid : Entity {
 
 	public void Select () {
 		pathRenderer.DisplaySelector(true);
+
+		if (OnVisionUpdated != null) {
+			OnVisionUpdated.Invoke();
+		}
 	}
 
+
+	// =============================================
+	// Path
+	// =============================================
 
 	protected void CreatePathRenderer () {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
@@ -100,6 +115,10 @@ public class Humanoid : Entity {
 	}
 
 
+	// =============================================
+	// Move
+	// =============================================
+
 	public void FollowPath () {
 		if (path == null) { return; }
 		StartCoroutine(FollowPathAnim());
@@ -107,10 +126,14 @@ public class Humanoid : Entity {
 
 
 	protected IEnumerator FollowPathAnim () {
+		// abandon cover
+		yield return StartCoroutine(MoveToCover(Vector3.zero));
+
 		moving = true;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, true);
 
 		int step = 0;
+		Vector3 lastPos = transform.localPosition;
 
 		while (path.Count > 0) {
 			//Vector3 point = new Vector3(path[0].x, 0, path[0].y);
@@ -130,6 +153,9 @@ public class Humanoid : Entity {
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
 
 		path = null;
+
+		// check for cover and move body towards it
+		SetCover (transform.localPosition - lastPos);
 	}
 
 
@@ -138,14 +164,77 @@ public class Humanoid : Entity {
 		float startTime = Time.time;
 
 		while(Time.time < startTime + duration) {
-			transform.position = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
+			transform.localPosition = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
 			cam.offset *= 0.95f;
 			yield return null;
 		}
 
-		transform.position = endPos;
+		transform.localPosition = endPos;
+
+		if (OnVisionUpdated != null) {
+			OnVisionUpdated.Invoke();
+		}
 	}
 
+
+	// =============================================
+	// Cover
+	// =============================================
+
+	protected void SetCover (Vector3 dir) {
+		Vector3 vec = Vector3.zero;
+		float d = 0.25f;
+
+		for (int i = 0; i < pathRenderer.cubeShields.Count; i++) {
+			Cube cube = pathRenderer.cubeShields[i];
+
+			if (cube.shieldTop.activeSelf) {
+				vec += new Vector3(0, 0, -d);
+			}
+
+			if (cube.shieldBottom.activeSelf) {
+				vec += new Vector3(0, 0, d);
+			}
+
+			if (cube.shieldLeft.activeSelf) {
+				vec += new Vector3(d, 0, 0);
+			}
+
+			if (cube.shieldRight.activeSelf) {
+				vec += new Vector3(-d, 0, 0);
+			}
+		}
+
+		StartCoroutine(MoveToCover(vec));
+	}
+
+
+	private IEnumerator MoveToCover (Vector3 vec, float duration = 0.1f) {
+		Vector3 startPos = body.transform.localPosition;
+		Vector3 endPos = new Vector3(
+			vec.x, 
+			body.transform.localPosition.y, 
+			vec.z
+		);
+
+		if (body.transform.localPosition == endPos) {
+			yield break;
+		}
+
+		float startTime = Time.time;
+
+		while(Time.time < startTime + duration) {
+			body.transform.localPosition = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
+			yield return null;
+		}
+
+		body.transform.localPosition = endPos;	
+	}
+
+
+	// =============================================
+	// Aim
+	// =============================================
 
 	public void Aim (Player target) {
 		print ("Aiming towards " + target);

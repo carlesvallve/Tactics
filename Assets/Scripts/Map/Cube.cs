@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Cube : MonoBehaviour {
 
-	private GameObject shieldTop;
-	private GameObject shieldBottom;
-	private GameObject shieldLeft;
-	private GameObject shieldRight;
+	public GameObject shieldTop { get; private set; }
+	public GameObject shieldBottom { get; private set; }
+	public GameObject shieldLeft { get; private set; }
+	public GameObject shieldRight { get; private set; }
 
 
 	void Awake () {

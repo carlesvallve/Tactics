@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 
 public class Squad : MonoBehaviour {
+	private Game game;
 	private GameCamera cam;
 
 	public GameObject playerPrefab;
@@ -19,7 +20,8 @@ public class Squad : MonoBehaviour {
 	}
 
 
-	public void Init (int maxPlayers, Vector3 pos, int radius, Color color) {
+	public void Init (Game game, int maxPlayers, Vector3 pos, int radius, Color color) {
+		this.game = game;
 		this.color = color;
 		
 		CreatePlayers(maxPlayers, pos, radius);
@@ -30,12 +32,25 @@ public class Squad : MonoBehaviour {
 	// Player Creation
 	// =============================================
 
+	private void SetPlayerHandlers (Player player) {
+		// update vision
+		player.OnVisionUpdated += () => {
+			List<Player> visibleEnemies = Vision.LOS(
+				currentPlayer, 
+				game.GetAllEnemies(),
+				true
+			);
+		};
+
+	}
+
 	private void CreatePlayers (int maxPlayers, Vector3 pos, int radius) {
 		players = new List<Player>();
 
 		for (int i = 0; i < maxPlayers; i++) {
 			Player player = CreatePlayer(i, pos, radius);
 			players.Add(player);
+			SetPlayerHandlers(player);
 		}
 	}
 

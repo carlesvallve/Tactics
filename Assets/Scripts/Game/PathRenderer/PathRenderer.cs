@@ -10,7 +10,7 @@ public class PathRenderer : MonoBehaviour {
 	
 	public  GameObject selector { get; private set; }
 	public List<PathDot> dots;
-	private List<Cube> cubeShields = new List<Cube>();
+	public List<Cube> cubeShields = new List<Cube>();
 
 	private Humanoid humanoid;
 	private Color color;
@@ -162,7 +162,7 @@ public class PathRenderer : MonoBehaviour {
 	}
 
 
-	public void DrawLine (Vector3 startPos, Vector3 endPos, Color color) {
+	public void DrawLine (Vector3 startPos, Vector3 endPos, Color color, float width = 0.02f) {
 		GameObject obj = (GameObject)Instantiate(linePrefab);
 		obj.transform.SetParent(transform);
 		obj.name = "Line";
@@ -171,6 +171,7 @@ public class PathRenderer : MonoBehaviour {
 		lineRenderer.material = new Material(Shader.Find("Particles/Additive"));
 
         lineRenderer.SetColors(color, color);
+        lineRenderer.SetWidth(width, width);
 		lineRenderer.SetPosition(0, startPos);
 		lineRenderer.SetPosition(1, endPos);
 

@@ -40,6 +40,8 @@ public class Vision : MonoBehaviour {
 		int i = 0;
 
 		i += CastVisionLine(player, enemy, centerPlayer, centerEnemy, debug);
+		i += CastVisionLine(player, enemy, centerPlayer, centerEnemy - vec * 0.5f, debug);
+		i += CastVisionLine(player, enemy, centerPlayer, centerEnemy + vec * 0.5f, debug);
 
 		i += CastVisionLine(player, enemy, centerPlayer - vec * 0.5f, centerEnemy, debug);
 		i += CastVisionLine(player, enemy, centerPlayer + vec * 0.5f, centerEnemy, debug);
@@ -52,6 +54,9 @@ public class Vision : MonoBehaviour {
 
 		i += CastVisionLine(player, enemy, centerPlayer - vec, centerEnemy - vec * 0.5f, debug);
 		i += CastVisionLine(player, enemy, centerPlayer + vec, centerEnemy + vec * 0.5f, debug);
+
+		//i += CastVisionLine(player, enemy, centerPlayer - vec, centerEnemy - vec, debug);
+		//i += CastVisionLine(player, enemy, centerPlayer + vec, centerEnemy + vec, debug);
 
 		// if at least one line is successfull, enemy will be visible
 		return i > 0;
