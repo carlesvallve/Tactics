@@ -32,6 +32,7 @@ public class GameCamera : MonoBehaviour {
 	private CameraMode cameraMode = CameraMode.Normal;
 
 
+	private bool transitioning = false;
 	private Vector3 normalModePosition;
 	private Quaternion normalModeRotation;
 	private float normalFov;
@@ -45,6 +46,10 @@ public class GameCamera : MonoBehaviour {
 		SetOffset();
 		SetZoom();
 		TrackTarget();
+
+		normalModePosition = transform.localPosition;
+		normalModeRotation = transform.rotation;
+		normalFov = Camera.main.fieldOfView;
 	}
 
 
@@ -156,17 +161,14 @@ public class GameCamera : MonoBehaviour {
 	// =======================================================
 
 	public IEnumerator SetAimMode (Player player, Player enemy) {
-		normalModePosition = transform.localPosition;
-		normalModeRotation = transform.rotation;
-		normalFov = Camera.main.fieldOfView;
+		if (transitioning) { yield break; }
 
+		transitioning = true;
 		cameraMode = CameraMode.Aim;
-
-		float duration = 1f;
 
 		Vector3 lookAtPos = enemy.transform.localPosition + Vector3.up * 0.5f;
 		player.body.transform.LookAt(
-			new Vector3(lookAtPos.x, Utilities.GetMeshBounds(player.body).size.y / 2, lookAtPos.z)
+			new Vector3(lookAtPos.x, player.transform.localPosition.y + Utilities.GetMeshBounds(player.body).size.y / 2, lookAtPos.z)
 		);
 
 		Vector3 endPos = player.transform.localPosition + 
@@ -176,6 +178,7 @@ public class GameCamera : MonoBehaviour {
 		
 		float endFov = 30;
 
+		float duration = 1f;
 		float startTime = Time.time;
 
 		while(Time.time < startTime + duration) {
@@ -183,9 +186,12 @@ public class GameCamera : MonoBehaviour {
 
 			Vector3 relativePos = lookAtPos - transform.position;
 			Quaternion rotation = Quaternion.LookRotation(relativePos);
-			transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration);
-			
+			transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration * 2f);
 			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
+
+			if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
+				break;
+			}
 			
 			yield return null;
 		}
@@ -193,26 +199,32 @@ public class GameCamera : MonoBehaviour {
 		transform.localPosition = endPos;
 		transform.LookAt(lookAtPos);
 		Camera.main.fieldOfView = endFov;
+
+		transitioning = false;
 	}
 
 
 	public IEnumerator SetNormalMode () {
-		if (cameraMode == CameraMode.Normal) {
-			yield break;
-		}
+		if (transitioning) { yield break; }
+		if (cameraMode == CameraMode.Normal) { yield break; }
 
-		float duration = 1f;
+		transitioning = true;
 
 		Vector3 endPos = normalModePosition;
 		Quaternion endRot = normalModeRotation;
 		float endFov = normalFov;
 
+		float duration = 3f;
 		float startTime = Time.time;
 
 		while(Time.time < startTime + duration) {
 			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, (Time.time - startTime) / duration);
-			transform.rotation = Quaternion.Slerp(transform.rotation, endRot, (Time.time - startTime) / duration);
+			transform.rotation = Quaternion.Slerp(transform.rotation, endRot, (Time.time - startTime) / duration * 2f);
 			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
+
+			if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
+				break;
+			}
 
 			yield return null;
 		}
@@ -222,5 +234,6 @@ public class GameCamera : MonoBehaviour {
 		Camera.main.fieldOfView = endFov;
 
 		cameraMode = CameraMode.Normal;
+		transitioning = false;
 	}
 }
