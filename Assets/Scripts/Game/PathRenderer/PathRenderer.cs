@@ -70,7 +70,7 @@ public class PathRenderer : MonoBehaviour {
 			// get color
 			Color color = Color.grey;
 			if (i <= movement) { color = GameSettings.colors.yellow; }
-			if (i <= movement / 2) { color = this.color; } // GameSettings.colors.cyan
+			if (i <= movement / 2) { color = this.color; }
 
 			// get scale
 			float sc = ((i == path.Count - 1 && i <= movement) || i == movement) ? 0.1f : 0.05f;

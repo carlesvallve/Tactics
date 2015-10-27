@@ -24,6 +24,14 @@ public class GameContainers {
 	- display aiming hud over enemy (aim circle, cover level, aim percent)
 	- click next icon or press tab to switch between targets
 
+- implement shoot feature
+	- calculate shot deviation
+	- get impact point
+	- instantiate bullet
+	- move bullet to impact point
+	- if impact point was target, apply damage
+	- if impact point was a solid, explode bullet and apply damage to solid
+
 - implement overwatch feature
 	- set player into overwatch mode
 	- when an enemy becomes visible:
@@ -78,7 +86,6 @@ public class Game : MonoBehaviour {
 
 
 	private List<Player> GetAllEnemies () {
-		// get list of all enemies in range
 		List<Player> enemies = new List<Player>();
 		for (int i = 0; i < squads.Count; i++) {
 			if (squads[i] == currentSquad) { continue; }
