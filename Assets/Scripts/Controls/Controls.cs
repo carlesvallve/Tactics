@@ -4,7 +4,9 @@ using System.Collections;
 public class Controls : MonoBehaviour {
 
 	public LayerMask layerMask;
+	
 	private Game game;
+	private Hud hud;
 	private GameCamera cam;
 
 	private bool mouseIsDown = false;
@@ -15,6 +17,7 @@ public class Controls : MonoBehaviour {
 
 	void Awake () {
 		game = GetComponent<Game>();
+		hud = GetComponent<Hud>();
 		cam = Camera.main.GetComponent<GameCamera>();
 	}
 
@@ -34,6 +37,12 @@ public class Controls : MonoBehaviour {
 			game.currentSquad.SelectNextPlayer();
 		}
 
+		// hud
+		if (Input.GetKeyDown(KeyCode.Tab)) {
+			hud.SelectNextEnemyIcon();
+		}
+		
+
 		// camera
 		if (Input.GetKeyDown(KeyCode.A)) {
 			cam.movement = new Vector3(-cam.offsetSpeed, cam.movement.y, cam.movement.z);
@@ -47,8 +56,13 @@ public class Controls : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.S)) {
 			cam.movement = new Vector3(cam.movement.x, cam.movement.y, -cam.offsetSpeed);
 		}
+
 		if (Input.GetKeyDown(KeyCode.Q)) { cam.RotateAroundTarget(-1); }
 		if (Input.GetKeyDown(KeyCode.E)) { cam.RotateAroundTarget(1); }
+
+		if (Input.GetKeyDown(KeyCode.Z)) {
+			StartCoroutine(cam.SetNormalMode());
+		}
 	}
 
 

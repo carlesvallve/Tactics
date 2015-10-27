@@ -7,6 +7,8 @@ public class Hud : MonoBehaviour {
 
 	public GameObject enemyIconPrefab;
 	private List<GameObject> enemyIcons;
+	private List<Player> visibleEnemies;
+	private int currentEnemyIcon;
 
 	private Game game;
 	private Transform header;
@@ -30,11 +32,14 @@ public class Hud : MonoBehaviour {
 	}
 
 	
-	public void SetEnemyIcons (List<Player> enemies) {
+	public void SetEnemyIcons (List<Player> visibleEnemies) {
 		ClearEnemyIcons();
 
-		for (int i = 0; i < enemies.Count; i ++) {
-			Player enemy = enemies[i];
+		this.visibleEnemies = visibleEnemies;
+		currentEnemyIcon = visibleEnemies.Count - 1;
+
+		for (int i = 0; i < visibleEnemies.Count; i ++) {
+			Player enemy = visibleEnemies[i];
 
 			GameObject obj = (GameObject)Instantiate(enemyIconPrefab);
 			obj.transform.SetParent(header);
@@ -47,7 +52,7 @@ public class Hud : MonoBehaviour {
 			image.color = enemy.color;
 
 			Button button = obj.GetComponent<Button>();
-			button.onClick.AddListener( delegate { SelectEnemyIcon(enemy); } );
+			button.onClick.AddListener( delegate { SelectEnemyIcon(i, enemy); } );
 		}
 
 		RectTransform rect = header.GetComponent<RectTransform>();
@@ -55,7 +60,16 @@ public class Hud : MonoBehaviour {
 	}
 
 
-	public void SelectEnemyIcon (Player enemy) {
+	public void SelectNextEnemyIcon () {
+		currentEnemyIcon += 1;
+		if (currentEnemyIcon > visibleEnemies.Count -1) { currentEnemyIcon = 0; }
+		SelectEnemyIcon(currentEnemyIcon, visibleEnemies[currentEnemyIcon]);
+	}
+
+
+	public void SelectEnemyIcon (int num, Player enemy) {
+		print ("selectEnemyIcon");
+		currentEnemyIcon = num;
 		game.currentSquad.currentPlayer.SetAim(enemy);
 	}
 }

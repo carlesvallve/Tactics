@@ -156,11 +156,18 @@ public class Utilities : MonoBehaviour {
 		return range[Random.Range(0, range.Length)];
 	}
 
-	private static Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
+	public static Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
 		return new Vector3 (
 			center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad),
 			center.y,
 			center.z + radius * Mathf.Cos(angle * Mathf.Deg2Rad)
 		);
 	}
+
+
+	public static Bounds GetMeshBounds (GameObject obj) {
+		Mesh mesh = obj.GetComponent<MeshFilter>().mesh;
+		return mesh.bounds;
+	}
+	
 }

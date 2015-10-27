@@ -265,7 +265,7 @@ public class Humanoid : Entity {
 		// camera goes at player position + small offset
 		// camera turns to look at target
 
-		StartCoroutine(cam.SetAim((Player)this, target));
+		StartCoroutine(cam.SetAimMode((Player)this, target));
 	}
 
 }
