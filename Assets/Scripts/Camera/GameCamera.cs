@@ -113,6 +113,9 @@ public class GameCamera : MonoBehaviour {
 
 	public void RotateAroundTarget(int dir) {
 		if (rotating) { return; }
+		if (transitioning) { return; }
+		if (cameraMode != CameraMode.Normal) { return; }
+		
 
 		StartCoroutine(RotateAroundPoint(
 			target.transform.localPosition + new Vector3(offset.x, 0, offset.z), 
@@ -172,32 +175,36 @@ public class GameCamera : MonoBehaviour {
 		);
 
 		Vector3 endPos = player.transform.localPosition + 
-		player.body.transform.up * 0.25f - 
-		player.body.transform.forward * 2.5f + 
+		player.body.transform.up * Random.Range(0.25f, 1.5f) - 
+		player.body.transform.forward * Random.Range(1f, 3f) + 
 		player.body.transform.right * Utilities.GetRandomSign();
-		
-		float endFov = 30;
 
-		float duration = 1f;
+		Vector3 direction = lookAtPos - transform.localPosition;
+		Quaternion endRot = Quaternion.LookRotation(direction);
+		
+		float endFov = 40;
+
+		float duration = 3f;
 		float startTime = Time.time;
 
 		while(Time.time < startTime + duration) {
 			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, (Time.time - startTime) / duration);
 
-			Vector3 relativePos = lookAtPos - transform.position;
-			Quaternion rotation = Quaternion.LookRotation(relativePos);
-			transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration * 2f);
+			direction = lookAtPos - transform.localPosition;
+			endRot = Quaternion.LookRotation(direction);
+			transform.localRotation = Quaternion.Slerp(transform.localRotation, endRot, (Time.time - startTime) / duration * 2f);
+			
 			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
 
-			if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
+			/*if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
 				break;
-			}
+			}*/
 			
 			yield return null;
 		}
 
 		transform.localPosition = endPos;
-		transform.LookAt(lookAtPos);
+		transform.localRotation = endRot;
 		Camera.main.fieldOfView = endFov;
 
 		transitioning = false;
@@ -222,9 +229,9 @@ public class GameCamera : MonoBehaviour {
 			transform.rotation = Quaternion.Slerp(transform.rotation, endRot, (Time.time - startTime) / duration * 2f);
 			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
 
-			if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
+			/*if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
 				break;
-			}
+			}*/
 
 			yield return null;
 		}

@@ -163,6 +163,9 @@ public class Humanoid : Entity {
 
 
 	protected IEnumerator MoveToPos(Vector3 endPos, float duration) {
+		// look at next pos direction
+		StartCoroutine(TurnToLookAt( new Vector3(endPos.x, 0, endPos.z), 0.1f));
+
 		Vector3 startPos = transform.localPosition;
 		float startTime = Time.time;
 
@@ -177,6 +180,24 @@ public class Humanoid : Entity {
 		if (OnVisionUpdated != null) {
 			OnVisionUpdated.Invoke();
 		}
+	}
+
+
+	protected IEnumerator TurnToLookAt(Vector3 lookAtPos, float duration) {
+		float t = 0;
+
+		Vector3 direction = lookAtPos - transform.localPosition;
+		Quaternion startRot = body.transform.rotation;
+		Quaternion endRot = Quaternion.LookRotation(direction);
+
+		while(t < 1) {
+			body.transform.localRotation = Quaternion.Slerp(startRot, endRot, t);
+
+			t += Time.deltaTime / duration;
+			yield return null;
+		}
+
+		body.transform.localRotation = endRot;
 	}
 
 
