@@ -152,14 +152,12 @@ public class GameCamera : MonoBehaviour {
 		float duration = 1f;
 
 		Vector3 lookAtPos = enemy.transform.localPosition + Vector3.up * 0.5f;
-		player.body.transform.LookAt(
-			new Vector3(lookAtPos.x, player.transform.localPosition.y, lookAtPos.z)
-		);
+		player.body.transform.LookAt(new Vector3(lookAtPos.x, 0, lookAtPos.z));
 
 		Vector3 endPos = player.transform.localPosition + 
 		player.body.transform.up * 0.25f - 
 		player.body.transform.forward * 2.5f + 
-		player.body.transform.right * Random.Range(-1, 2);
+		player.body.transform.right * Utilities.GetRandomSign();
 		
 		float endFov = 30;
 
@@ -170,7 +168,7 @@ public class GameCamera : MonoBehaviour {
 
 			Vector3 relativePos = lookAtPos - transform.position;
         	Quaternion rotation = Quaternion.LookRotation(relativePos);
-    		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration); //Time.deltaTime * 8);
+    		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (Time.time - startTime) / duration);
 			
 			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
 			yield return null;

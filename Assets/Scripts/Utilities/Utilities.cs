@@ -150,6 +150,12 @@ public class Utilities : MonoBehaviour {
 	// Others
 	// ===================================================================
 
+	public static int GetRandomSign () {
+		int[] range = new int[] { -1, 1 };
+
+		return range[Random.Range(0, range.Length)];
+	}
+
 	private static Vector3 GetPointOnCircle(Vector3 center, float radius, float angle) { 
 		return new Vector3 (
 			center.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad),
