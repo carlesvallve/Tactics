@@ -190,7 +190,7 @@ public class GameCamera : MonoBehaviour {
 		Quaternion endRot = Quaternion.LookRotation(forward);
 		
 		// get end fov
-		float endFov = 60;
+		float endFov = 50;
 
 		float duration = 1.5f;
 		float t = 0;
@@ -208,7 +208,7 @@ public class GameCamera : MonoBehaviour {
 			transform.localRotation = Quaternion.Lerp(transform.localRotation, endRot, step);
 			
 			// fov
-			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, step / 2);
+			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, step / 3);
 
 			yield return null;
 		}
