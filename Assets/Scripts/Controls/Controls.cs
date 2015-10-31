@@ -29,17 +29,29 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateKeyControls () {
+		if (cam.IsTransitioning()) {
+			return;
+		}
+
+		// hud / camera
+		if (Input.GetKeyDown(KeyCode.Tab)) {
+			hud.SelectNextEnemyIcon();
+		}
+
+		if (Input.GetKeyDown(KeyCode.Z)) {
+			StartCoroutine(cam.SetNormalMode());
+		}
+
+		if (cam.GetCameraMode() != CameraMode.Normal) {
+			return;
+		}
+
 		// game
 		if (Input.GetKeyDown(KeyCode.Return)) {
 			game.SelectNextSquad();
 		}
 		if (Input.GetKeyDown(KeyCode.Space)) {
 			game.currentSquad.SelectNextPlayer();
-		}
-
-		// hud
-		if (Input.GetKeyDown(KeyCode.Tab)) {
-			hud.SelectNextEnemyIcon();
 		}
 		
 
@@ -59,16 +71,20 @@ public class Controls : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Q)) { cam.RotateAroundTarget(-1); }
 		if (Input.GetKeyDown(KeyCode.E)) { cam.RotateAroundTarget(1); }
-
-		if (Input.GetKeyDown(KeyCode.Z)) {
-			StartCoroutine(cam.SetNormalMode());
-		}
 	}
 
 
 	private void UpdateMouseControls () {
+		if (cam.IsTransitioning()) {
+			return;
+		}
+
 		// on mouse down
 		if (Input.GetButtonDown("Fire1")) {
+			if (PointerInteraction.IsPointerOverGameObject()) {
+				return;
+			}
+			
 			mouseIsDown = true;
 			mouseHasMoved = false;
 			mouseLastPos = Input.mousePosition;
@@ -126,6 +142,10 @@ public class Controls : MonoBehaviour {
 
 
 	private void TapOnGrid (RaycastHit hit) {
+		if (cam.GetCameraMode() != CameraMode.Normal) {
+			return;
+		}
+
 		Vector3 pos = new Vector3(Mathf.Round(hit.point.x), hit.point.y, Mathf.Round(hit.point.z));
 		if (pos.x < 0 || pos.z < 0 || pos.x > Grid.xsize - 1 || pos.z > Grid.ysize - 1) { return; }
 
@@ -136,6 +156,7 @@ public class Controls : MonoBehaviour {
 	private void TapOnPlayer (RaycastHit hit) {
 		Player player = hit.transform.parent.GetComponent<Player>();
 		if (player.squad == game.currentSquad) {
+			if (cam.GetCameraMode() != CameraMode.Normal) { return; }
 			game.currentSquad.SelectPlayer(player);
 		} else {
 			game.currentSquad.currentPlayer.SetAim(player);

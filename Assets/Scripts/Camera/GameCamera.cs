@@ -53,6 +53,15 @@ public class GameCamera : MonoBehaviour {
 	}
 
 
+	public bool IsTransitioning () {
+		return transitioning;
+	}
+
+	public CameraMode GetCameraMode () {
+		return cameraMode;
+	}
+
+
 	public void SetTarget (GameObject obj) {
 		target = obj;
 		offset = Vector3.zero;
