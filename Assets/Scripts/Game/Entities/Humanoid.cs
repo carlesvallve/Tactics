@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Humanoid : Entity {
-	
+
 	public int movement = 4;
 	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
@@ -41,6 +41,7 @@ public class Humanoid : Entity {
 		CreatePathRenderer();
 		SetBodyOutline();
 
+		path = new List<Vector2>();
 		pathRenderer.SetShieldsAtPos(transform.localPosition, color);
 		SetCover();
 	}
@@ -58,6 +59,7 @@ public class Humanoid : Entity {
 	// =============================================
 
 	public void Deselect () {
+		path.Clear();
 		pathRenderer.DestroyPath();
 		pathRenderer.DisplaySelector(false);
 		pathRenderer.ClearLines();
@@ -90,7 +92,7 @@ public class Humanoid : Entity {
 	public void SetPath (Vector3 pos) {
 		if (moving) { return; }
 
-		if (path != null && path.Count > 0) {
+		if (path.Count > 0) {
 			Vector3 goal = new Vector3(path[path.Count -1].x, 0, path[path.Count -1].y);
 			if (pos == goal) {
 				FollowPath();
@@ -105,7 +107,7 @@ public class Humanoid : Entity {
 			(int)pos.z
 		);
 
-		if (path == null || path.Count == 0) { 
+		if (path.Count == 0) { 
 			pathRenderer.DestroyPath();
 			return;
 		}
@@ -120,7 +122,7 @@ public class Humanoid : Entity {
 	// =============================================
 
 	public void FollowPath () {
-		if (path == null) { return; }
+		if (path.Count == 0) { return; }
 		StartCoroutine(FollowPathAnim());
 	}
 
@@ -149,8 +151,6 @@ public class Humanoid : Entity {
 
 		moving = false;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
-
-		path = null;
 
 		// check for cover and move body towards it
 		SetCover ();

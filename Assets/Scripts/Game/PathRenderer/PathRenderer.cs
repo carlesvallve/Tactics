@@ -59,7 +59,6 @@ public class PathRenderer : MonoBehaviour {
 
 		dots = new List<PathDot>();
 
-		
 		int goalNum = 0;
 		Color goalColor = GameSettings.colors.grey;
 
@@ -99,12 +98,11 @@ public class PathRenderer : MonoBehaviour {
 
 
 	public void DestroyPath () {
-		if (dots == null) { return; }
+		if (dots.Count == 0) { return; }
 		
 		for (int i = 0; i < dots.Count; i++) { 
 			DestroyDot(i); 
 		}
-		dots = null;
 
 		ClearShields();
 	}
