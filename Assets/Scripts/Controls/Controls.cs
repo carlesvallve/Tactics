@@ -29,9 +29,9 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateKeyControls () {
-		if (cam.IsTransitioning()) {
+		/*if (cam.IsTransitioning()) {
 			return;
-		}
+		}*/
 
 		// hud / camera
 		if (Input.GetKeyDown(KeyCode.Tab)) {
@@ -39,10 +39,10 @@ public class Controls : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Z)) {
-			StartCoroutine(cam.SetNormalMode());
+			cam.SetNormalMode();
 		}
 
-		if (cam.GetCameraMode() != CameraMode.Normal) {
+		if (cam.mode != CameraMode.Normal) {
 			return;
 		}
 
@@ -75,16 +75,16 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateMouseControls () {
-		if (cam.IsTransitioning()) {
+		/*if (cam.IsTransitioning()) {
 			return;
-		}
+		}*/
 
 		// on mouse down
 		if (Input.GetButtonDown("Fire1")) {
 			if (PointerInteraction.IsPointerOverGameObject()) {
 				return;
 			}
-			
+
 			mouseIsDown = true;
 			mouseHasMoved = false;
 			mouseLastPos = Input.mousePosition;
@@ -142,7 +142,7 @@ public class Controls : MonoBehaviour {
 
 
 	private void TapOnGrid (RaycastHit hit) {
-		if (cam.GetCameraMode() != CameraMode.Normal) {
+		if (cam.mode != CameraMode.Normal) {
 			return;
 		}
 
@@ -156,7 +156,7 @@ public class Controls : MonoBehaviour {
 	private void TapOnPlayer (RaycastHit hit) {
 		Player player = hit.transform.parent.GetComponent<Player>();
 		if (player.squad == game.currentSquad) {
-			if (cam.GetCameraMode() != CameraMode.Normal) { return; }
+			if (cam.mode != CameraMode.Normal) { return; }
 			game.currentSquad.SelectPlayer(player);
 		} else {
 			game.currentSquad.currentPlayer.SetAim(player);

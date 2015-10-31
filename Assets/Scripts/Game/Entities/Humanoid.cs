@@ -273,7 +273,6 @@ public class Humanoid : Entity {
 	// =============================================
 
 	public void SetAim (Player target) {
-
 		/*
 		- click on a visible enemy or enemy hud icon -> OK
 		- move player body to a position where he has a clean line of vision
@@ -282,10 +281,15 @@ public class Humanoid : Entity {
 		- click next icon or press tab to switch between targets
 		*/
 
-		// camera goes at player position + small offset
-		// camera turns to look at target
+		// get positions
+		Vector3 lookFromPos = transform.localPosition + Vector3.up * 0.5f;
+		Vector3 lookAtPos = target.transform.localPosition + Vector3.up * 0.5f;
 
-		StartCoroutine(cam.SetAimMode((Player)this, target));
+		// turn player towards target
+		StartCoroutine(TurnToLookAt( new Vector3(lookAtPos.x, 0, lookAtPos.z), 0.25f));
+
+		// set camera to aiming mode
+		cam.SetAimingMode(lookFromPos, lookAtPos);
 	}
 
 }

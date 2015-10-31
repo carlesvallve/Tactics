@@ -3,10 +3,13 @@ using System.Collections;
 
 public enum CameraMode {
 	Normal = 1,
-	Aim = 2,
+	Aiming = 2,
+	Rotating = 3
 }
 
 public class GameCamera : MonoBehaviour {
+	// camera mode
+	public CameraMode mode = CameraMode.Normal;
 
 	// main parameters
 	public Vector3 distance = new Vector3(-16f, 16f, -16f);
@@ -17,7 +20,6 @@ public class GameCamera : MonoBehaviour {
 
 	// rotation parameters
 	public float rotationSpeed = 0.75f;
-	private bool rotating = false;
 
 	// zoom parameters
 	public float zoomSpeed = 0.1f;
@@ -29,17 +31,14 @@ public class GameCamera : MonoBehaviour {
 	public float offsetSpeed = 0.5f;
 	public float offsetFriction = 0.85f;
 
-	private CameraMode cameraMode = CameraMode.Normal;
-
-
-	private bool transitioning = false;
+	// normal pos, rot, fov
 	private Vector3 normalModePosition;
 	private Quaternion normalModeRotation;
 	private float normalFov;
 
 
 	void LateUpdate () {
-		if (cameraMode == CameraMode.Aim) { 
+		if (mode == CameraMode.Aiming) { 
 			return; 
 		}
 
@@ -53,15 +52,6 @@ public class GameCamera : MonoBehaviour {
 	}
 
 
-	public bool IsTransitioning () {
-		return transitioning;
-	}
-
-	public CameraMode GetCameraMode () {
-		return cameraMode;
-	}
-
-
 	public void SetTarget (GameObject obj) {
 		target = obj;
 		offset = Vector3.zero;
@@ -70,7 +60,7 @@ public class GameCamera : MonoBehaviour {
 
 
 	public void TrackTarget () {
-		if (rotating) { return; }
+		if (mode != CameraMode.Normal) { return; }
 
 		Vector3 pos = Vector3.zero;
 		if (target == null) {
@@ -121,11 +111,8 @@ public class GameCamera : MonoBehaviour {
 	// =======================================================
 
 	public void RotateAroundTarget(int dir) {
-		if (rotating) { return; }
-		if (transitioning) { return; }
-		if (cameraMode != CameraMode.Normal) { return; }
+		if (mode != CameraMode.Normal) { return; }
 		
-
 		StartCoroutine(RotateAroundPoint(
 			target.transform.localPosition + new Vector3(offset.x, 0, offset.z), 
 			new Vector3(0,1,0), 
@@ -136,7 +123,7 @@ public class GameCamera : MonoBehaviour {
 
 
 	private IEnumerator RotateAroundPoint(Vector3 point, Vector3 axis, float rotateAmount, float rotateTime) {
-		rotating = true;
+		mode = CameraMode.Rotating;
 
 		float step = 0; //non-smoothed
 		float rate = 1 / rotateTime; //amount to increase non-smooth step by
@@ -164,7 +151,7 @@ public class GameCamera : MonoBehaviour {
 			transform.localPosition.z - point.z
 		);	
 
-		rotating = false;
+		mode = CameraMode.Normal;
 	}
 
 
@@ -172,43 +159,87 @@ public class GameCamera : MonoBehaviour {
 	// Camera Mode Transitions
 	// =======================================================
 
-	public IEnumerator SetAimMode (Player player, Player enemy) {
-		if (transitioning) { yield break; }
+	// Aiming Mode
 
-		transitioning = true;
-		cameraMode = CameraMode.Aim;
+	public void SetAimingMode (Vector3 lookFromPos, Vector3 lookAtPos) {
+		if (mode == CameraMode.Rotating) {  return; }
 
-		Vector3 lookAtPos = enemy.transform.localPosition + Vector3.up * 0.5f;
-		player.body.transform.LookAt(
-			new Vector3(lookAtPos.x, player.transform.localPosition.y + Utilities.GetMeshBounds(player.body).size.y / 2, lookAtPos.z)
-		);
+		StopAllCoroutines();
+		StartCoroutine(SetAimingModeCoroutine(lookFromPos, lookAtPos));
+	}
 
-		Vector3 endPos = player.transform.localPosition + 
-		player.body.transform.up * Random.Range(0.25f, 1.5f) - 
-		player.body.transform.forward * Random.Range(1f, 3f) + 
-		player.body.transform.right * Utilities.GetRandomSign();
+	public IEnumerator SetAimingModeCoroutine (Vector3 lookFromPos, Vector3 lookAtPos) {
+		mode = CameraMode.Aiming;
 
-		Vector3 direction = lookAtPos - transform.localPosition;
-		Quaternion endRot = Quaternion.LookRotation(direction);
+		// get directions
+		Vector3 forward = (lookAtPos - lookFromPos).normalized;
+		Vector3 right = Vector3.Cross(forward, Vector3.up).normalized;
+
+		// get end pos
+		Vector3 endPos = lookFromPos + 
+		Vector3.up * Random.Range(0.25f, 1.5f) - 
+		forward * Random.Range(1f, 3f) + 
+		right * Utilities.GetRandomSign();
+
+		// get end rot
+		Quaternion endRot = Quaternion.LookRotation(forward);
 		
-		float endFov = 40;
+		// get end fov
+		float endFov = 60;
 
-		float duration = 3f;
-		float startTime = Time.time;
+		float duration = 1.5f;
+		float t = 0;
 
-		while(Time.time < startTime + duration) {
-			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, (Time.time - startTime) / duration);
+		while(t <= 1f) {
+			t += Time.deltaTime / duration;
+			float step =  Mathf.SmoothStep(0, 1, t);
 
-			direction = lookAtPos - transform.localPosition;
-			endRot = Quaternion.LookRotation(direction);
-			transform.localRotation = Quaternion.Slerp(transform.localRotation, endRot, (Time.time - startTime) / duration * 2f);
+			// position
+			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, step / 2);
+
+			// rotation
+			forward = (lookAtPos - transform.localPosition).normalized;
+			endRot = Quaternion.LookRotation(forward);
+			transform.localRotation = Quaternion.Lerp(transform.localRotation, endRot, step);
 			
-			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
+			// fov
+			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, step / 2);
 
-			/*if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
-				break;
-			}*/
-			
+			yield return null;
+		}
+
+		transform.localPosition = endPos;
+		transform.localRotation = endRot;
+		Camera.main.fieldOfView = endFov;
+	}
+
+
+	// Normal Mode
+
+	public void SetNormalMode () {
+		if (mode != CameraMode.Aiming) { return; }
+
+		StopAllCoroutines();
+		StartCoroutine(SetNormalModeCoroutine());
+	}
+
+	public IEnumerator SetNormalModeCoroutine () {
+		
+		Vector3 endPos = normalModePosition;
+		Quaternion endRot = normalModeRotation;
+		float endFov = normalFov;
+
+		float duration = 1.5f;
+		float t = 0;
+
+		while(t <= 1f) {
+			t += Time.deltaTime / duration;
+			float step =  Mathf.SmoothStep(0, 1, t);
+
+			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, step / 2);
+			transform.localRotation = Quaternion.Slerp(transform.rotation, endRot, step);
+			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, step / 2);
+
 			yield return null;
 		}
 
@@ -216,40 +247,6 @@ public class GameCamera : MonoBehaviour {
 		transform.localRotation = endRot;
 		Camera.main.fieldOfView = endFov;
 
-		transitioning = false;
-	}
-
-
-	public IEnumerator SetNormalMode () {
-		if (transitioning) { yield break; }
-		if (cameraMode == CameraMode.Normal) { yield break; }
-
-		transitioning = true;
-
-		Vector3 endPos = normalModePosition;
-		Quaternion endRot = normalModeRotation;
-		float endFov = normalFov;
-
-		float duration = 3f;
-		float startTime = Time.time;
-
-		while(Time.time < startTime + duration) {
-			transform.localPosition = Vector3.Lerp(transform.localPosition, endPos, (Time.time - startTime) / duration);
-			transform.rotation = Quaternion.Slerp(transform.rotation, endRot, (Time.time - startTime) / duration * 2f);
-			Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, endFov, (Time.time - startTime) / duration);
-
-			/*if (Vector3.Distance(transform.localPosition, endPos) <= 0.1f) {
-				break;
-			}*/
-
-			yield return null;
-		}
-
-		transform.localPosition = endPos;
-		transform.rotation = normalModeRotation;
-		Camera.main.fieldOfView = endFov;
-
-		cameraMode = CameraMode.Normal;
-		transitioning = false;
+		mode = CameraMode.Normal;
 	}
 }
