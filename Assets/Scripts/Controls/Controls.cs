@@ -36,7 +36,7 @@ public class Controls : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown(KeyCode.Z)) {
-			cam.SetNormalMode();
+			Game.instance.currentSquad.currentPlayer.StopAiming();
 		}
 
 		if (cam.mode != CameraMode.Normal) {
@@ -152,7 +152,7 @@ public class Controls : MonoBehaviour {
 			if (cam.mode != CameraMode.Normal) { return; }
 			game.currentSquad.SelectPlayer(player);
 		} else {
-			game.currentSquad.currentPlayer.SetAim(player);
+			game.currentSquad.currentPlayer.StartAiming(player);
 		}
 	}
 }

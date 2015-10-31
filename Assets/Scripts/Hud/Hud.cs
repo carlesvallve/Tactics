@@ -74,6 +74,6 @@ public class Hud : MonoBehaviour {
 
 	public void SelectEnemyIcon (int num, Player enemy) {
 		currentEnemyIcon = num;
-		Game.instance.currentSquad.currentPlayer.SetAim(enemy);
+		Game.instance.currentSquad.currentPlayer.StartAiming(enemy);
 	}
 }

@@ -14,7 +14,10 @@ public class Humanoid : Entity {
 	public bool moving { get; private set; }
 
 	public GameObject body { get; private set; }
-	protected Material material;
+	//protected Material material;
+	protected Renderer[] renderers;
+
+	protected Animation anim;
 
 	public Squad squad { get; private set; }
 	public int num { get; private set; }
@@ -28,8 +31,10 @@ public class Humanoid : Entity {
 
 
 	public void Init (Squad squad, int num, Vector3 pos, Color color) {
-		body = transform.Find("Body").gameObject;
-		material = body.GetComponent<Renderer>().material;
+		body = transform.Find("soldierNoScript").gameObject;
+		anim = body.GetComponent<Animation>();
+		//material = body.GetComponent<Renderer>().material;
+		renderers = body.GetComponentsInChildren<Renderer>();
 
 		this.squad = squad;
 		this.num = num;
@@ -49,9 +54,11 @@ public class Humanoid : Entity {
 
 	protected void SetBodyOutline () {
 		float outlineWidth = 0.0002f;
-
-		if (material.HasProperty("_Outline")) { material.SetFloat("_Outline", outlineWidth); }
-		if (material.HasProperty("_OutlineColor")) { material.SetColor("_OutlineColor", color); } 
+		foreach (Renderer renderer in renderers) {
+			Material material = renderer.material;
+			if (material.HasProperty("_Outline")) { material.SetFloat("_Outline", outlineWidth); }
+			if (material.HasProperty("_OutlineColor")) { material.SetColor("_OutlineColor", color); } 
+		}
 	}
 
 	// =============================================
@@ -129,7 +136,9 @@ public class Humanoid : Entity {
 
 	protected IEnumerator FollowPathAnim () {
 		// abandon cover
-		yield return StartCoroutine(MoveToCover(Vector3.zero));
+		//yield return StartCoroutine(MoveToCover(Vector3.zero));
+
+		anim.CrossFade("soldierSprint", 0.2f);
 
 		moving = true;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, true);
@@ -152,8 +161,10 @@ public class Humanoid : Entity {
 		moving = false;
 		Grid.SetWalkable(transform.localPosition.x, transform.localPosition.z, false);
 
+		anim.CrossFade("soldierIdleRelaxed", 0.2f);
+
 		// check for cover and move body towards it
-		SetCover ();
+		//SetCover ();
 	}
 
 
@@ -268,7 +279,7 @@ public class Humanoid : Entity {
 	// Aim
 	// =============================================
 
-	public void SetAim (Player target) {
+	public void StartAiming (Player target) {
 		/*
 		- click on a visible enemy or enemy hud icon -> OK
 		- move player body to a position where he has a clean line of vision
@@ -281,11 +292,19 @@ public class Humanoid : Entity {
 		Vector3 lookFromPos = transform.localPosition + Vector3.up * 0.5f;
 		Vector3 lookAtPos = target.transform.localPosition + Vector3.up * 0.5f;
 
+		anim.CrossFade("soldierIdle", 0.2f);
+
 		// turn player towards target
 		StartCoroutine(TurnToLookAt( new Vector3(lookAtPos.x, transform.localPosition.y, lookAtPos.z), 0.25f));
 
 		// set camera to aiming mode
 		GameCamera.instance.SetAimingMode(lookFromPos, lookAtPos);
+	}
+
+
+	public void StopAiming () {
+		anim.CrossFade("soldierIdleRelaxed", 0.2f);
+		GameCamera.instance.SetNormalMode();
 	}
 
 }
