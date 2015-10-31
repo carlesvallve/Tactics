@@ -8,6 +8,8 @@ public enum CameraMode {
 }
 
 public class GameCamera : MonoBehaviour {
+	public static GameCamera instance;
+
 	// camera mode
 	public CameraMode mode = CameraMode.Normal;
 
@@ -36,6 +38,9 @@ public class GameCamera : MonoBehaviour {
 	private Quaternion normalModeRotation;
 	private float normalFov;
 
+	void Awake () {
+		instance = this;
+	}
 
 	void LateUpdate () {
 		if (mode == CameraMode.Aiming) { 

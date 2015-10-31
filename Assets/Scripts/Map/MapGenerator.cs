@@ -3,21 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-
-
 public class MapGenerator : MonoBehaviour {
+	
+	public static MapGenerator instance;
+
+	public MapPrefabs prefabs = new MapPrefabs();
+
 	public int width = 14;
 	public int height = 14;
 	public int maxCubes = 1;
-	public MapPrefabs prefabs = new MapPrefabs();
-
-	private GameObject mapContainer;
-	private GameObject floor;
+	
+	private Transform mapContainer;
 	private List<GameObject> cubes;
 
 
+	void Awake () {
+		instance = this;
+	}
+
+
 	public void Generate () {
-		mapContainer = GameObject.Find("Map");
+		mapContainer = Game.instance.containers.map;
 
 		SetSize();
 		GenerateRandomCubes();
@@ -25,15 +31,15 @@ public class MapGenerator : MonoBehaviour {
 
 
 	private void SetSize () {
-		floor = GameObject.Find("Floor");
-		floor.transform.localScale = new Vector3(width + 1, 0.2f, height + 1);
-		floor.transform.localPosition = new Vector3(
-			-1 + floor.transform.localScale.x / 2, 
-			-floor.transform.localScale.y / 2, 
-			-1 + floor.transform.localScale.z / 2 
+		Transform floor = mapContainer.Find("Floor");
+		floor.localScale = new Vector3(width + 1, 0.2f, height + 1);
+		floor.localPosition = new Vector3(
+			-1 + floor.localScale.x / 2, 
+			-floor.localScale.y / 2, 
+			-1 + floor.localScale.z / 2 
 		);
 
-		Vector2 vec = new Vector2(floor.transform.localScale.x / 3f, floor.transform.localScale.z / 3f);
+		Vector2 vec = new Vector2(floor.localScale.x / 3f, floor.localScale.z / 3f);
 		Material material = floor.GetComponent<Renderer>().material;
 		material.SetTextureScale("_MainTex", vec);
 		material.SetTextureScale("_BumpMap", vec);	
@@ -43,7 +49,7 @@ public class MapGenerator : MonoBehaviour {
 	private void GenerateRandomCubes () {
 		for (int i = 0; i < maxCubes; i++) {
 			GameObject cube = (GameObject)Instantiate(prefabs.cube);
-			cube.transform.SetParent(mapContainer.transform);
+			cube.transform.SetParent(mapContainer);
 			cube.name = "Cube";
 
 			Vector3 pos = new Vector3(Random.Range(0, width), 0, Random.Range(0, height));

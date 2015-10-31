@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Humanoid : Entity {
-	protected Game game;
-	protected GameCamera cam;
-
+	
 	public int movement = 4;
 	public float speed = 0.2f; // duration for walking one step
 	public GameObject pathPrefab;
@@ -30,8 +28,6 @@ public class Humanoid : Entity {
 
 
 	public void Init (Squad squad, int num, Vector3 pos, Color color) {
-		game = GameObject.Find("Game").GetComponent<Game>();
-		cam = Camera.main.GetComponent<GameCamera>();
 		body = transform.Find("Body").gameObject;
 		material = body.GetComponent<Renderer>().material;
 
@@ -84,7 +80,7 @@ public class Humanoid : Entity {
 
 	protected void CreatePathRenderer () {
 		GameObject obj = (GameObject)Instantiate(pathPrefab);
-		obj.transform.SetParent(Game.containers.fx);
+		obj.transform.SetParent(Game.instance.containers.fx);
 		obj.name = "Path " + name;
 		pathRenderer  = obj.GetComponent<PathRenderer>();
 		pathRenderer.Init(this, color);
@@ -170,7 +166,7 @@ public class Humanoid : Entity {
 
 		while(Time.time < startTime + duration) {
 			transform.localPosition = Vector3.Lerp(startPos, endPos, (Time.time - startTime) / duration);
-			cam.offset *= 0.95f;
+			GameCamera.instance.offset *= 0.95f;
 			yield return null;
 		}
 
@@ -289,7 +285,7 @@ public class Humanoid : Entity {
 		StartCoroutine(TurnToLookAt( new Vector3(lookAtPos.x, transform.localPosition.y, lookAtPos.z), 0.25f));
 
 		// set camera to aiming mode
-		cam.SetAimingMode(lookFromPos, lookAtPos);
+		GameCamera.instance.SetAimingMode(lookFromPos, lookAtPos);
 	}
 
 }

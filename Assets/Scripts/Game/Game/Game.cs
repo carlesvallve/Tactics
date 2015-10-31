@@ -40,12 +40,11 @@ using System.Collections.Generic;
 */
 
 public class Game : MonoBehaviour {
-	
-	public static GameContainers containers;
 
-	public GameContainers gameContainers = new GameContainers();
+	public static Game instance;
+
+	public GameContainers containers = new GameContainers();
 	public GamePrefabs prefabs = new GamePrefabs();
-	//public GameObject squadPrefab;
 	
 	private Hud hud;
 	private MapGenerator map;
@@ -56,13 +55,15 @@ public class Game : MonoBehaviour {
 
 
 	void Awake () {
-		containers = gameContainers;
+		instance = this;
+	}
 
+
+	void Start () {
 		InitHud();
 		InitMap();
 		InitGrid();
 		InitSquads();
-		
 	}
 
 
@@ -100,7 +101,7 @@ public class Game : MonoBehaviour {
 
 	private void InitHud () {
 		hud = GetComponent<Hud>();
-		hud.Init(this);
+		hud.Init();
 	}
 	
 
@@ -156,7 +157,7 @@ public class Game : MonoBehaviour {
 		obj.name = "Squad";
 
 		Squad squad = obj.GetComponent<Squad>();
-		squad.Init(this, maxPlayers, pos, radius, color);
+		squad.Init(maxPlayers, pos, radius, color);
 
 		return squad;
 	}

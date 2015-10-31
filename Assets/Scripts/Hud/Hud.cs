@@ -4,19 +4,23 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Hud : MonoBehaviour {
+	public static Hud instance;
+
 	public HudPrefabs prefabs = new HudPrefabs();
 
 	private List<GameObject> enemyIcons;
 	private List<Player> visibleEnemies;
 	private int currentEnemyIcon;
 
-	private Game game;
 	private Transform header;
 	
 
-	public void Init (Game game) {
-		this.game = game;
+	void Awake () {
+		instance = this;
+	}
 
+
+	public void Init () {
 		Transform hud = GameObject.Find("Hud").transform;
 		header = hud.Find("Header");
 
@@ -70,6 +74,6 @@ public class Hud : MonoBehaviour {
 
 	public void SelectEnemyIcon (int num, Player enemy) {
 		currentEnemyIcon = num;
-		game.currentSquad.currentPlayer.SetAim(enemy);
+		Game.instance.currentSquad.currentPlayer.SetAim(enemy);
 	}
 }

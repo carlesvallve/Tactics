@@ -15,10 +15,10 @@ public class Controls : MonoBehaviour {
 	private Vector3 mouseDelta;
 	
 
-	void Awake () {
-		game = GetComponent<Game>();
-		hud = GetComponent<Hud>();
-		cam = Camera.main.GetComponent<GameCamera>();
+	void Start () {
+		game = Game.instance;
+		hud = Hud.instance;
+		cam = GameCamera.instance;
 	}
 
 
@@ -29,9 +29,6 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateKeyControls () {
-		/*if (cam.IsTransitioning()) {
-			return;
-		}*/
 
 		// hud / camera
 		if (Input.GetKeyDown(KeyCode.Tab)) {
@@ -54,7 +51,6 @@ public class Controls : MonoBehaviour {
 			game.currentSquad.SelectNextPlayer();
 		}
 		
-
 		// camera
 		if (Input.GetKeyDown(KeyCode.A)) {
 			cam.movement = new Vector3(-cam.offsetSpeed, cam.movement.y, cam.movement.z);
@@ -75,10 +71,6 @@ public class Controls : MonoBehaviour {
 
 
 	private void UpdateMouseControls () {
-		/*if (cam.IsTransitioning()) {
-			return;
-		}*/
-
 		// on mouse down
 		if (Input.GetButtonDown("Fire1")) {
 			if (PointerInteraction.IsPointerOverGameObject()) {
@@ -155,6 +147,7 @@ public class Controls : MonoBehaviour {
 
 	private void TapOnPlayer (RaycastHit hit) {
 		Player player = hit.transform.parent.GetComponent<Player>();
+		
 		if (player.squad == game.currentSquad) {
 			if (cam.mode != CameraMode.Normal) { return; }
 			game.currentSquad.SelectPlayer(player);
