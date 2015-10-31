@@ -7,7 +7,7 @@ public class Squad : MonoBehaviour {
 	private Game game;
 	private GameCamera cam;
 
-	public GameObject playerPrefab;
+	public SquadPrefabs prefabs = new SquadPrefabs();
 	public List<Player> players;
 	public Color color;
 
@@ -52,7 +52,7 @@ public class Squad : MonoBehaviour {
 
 
 	private Player CreatePlayer (int num, Vector3 pos, int radius) {
-		GameObject obj = (GameObject)Instantiate(playerPrefab);
+		GameObject obj = (GameObject)Instantiate(prefabs.player);
 		obj.transform.SetParent(transform);
 		obj.name = "Player" + num;
 

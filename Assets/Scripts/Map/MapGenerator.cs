@@ -2,17 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class MapPrefabs {
-	public GameObject cube;
-}
+
 
 
 public class MapGenerator : MonoBehaviour {
 	public int width = 14;
 	public int height = 14;
 	public int maxCubes = 1;
-	public MapPrefabs mapPrefabs = new MapPrefabs();
+	public MapPrefabs prefabs = new MapPrefabs();
 
 	private GameObject mapContainer;
 	private GameObject floor;
@@ -45,7 +42,7 @@ public class MapGenerator : MonoBehaviour {
 	
 	private void GenerateRandomCubes () {
 		for (int i = 0; i < maxCubes; i++) {
-			GameObject cube = (GameObject)Instantiate(mapPrefabs.cube);
+			GameObject cube = (GameObject)Instantiate(prefabs.cube);
 			cube.transform.SetParent(mapContainer.transform);
 			cube.name = "Cube";
 

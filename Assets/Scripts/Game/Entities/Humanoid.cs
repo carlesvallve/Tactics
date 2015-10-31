@@ -163,7 +163,7 @@ public class Humanoid : Entity {
 
 	protected IEnumerator MoveToPos(Vector3 endPos, float duration) {
 		// look at next pos direction
-		StartCoroutine(TurnToLookAt( new Vector3(endPos.x, 0, endPos.z), 0.1f));
+		StartCoroutine(TurnToLookAt( new Vector3(endPos.x, transform.localPosition.y, endPos.z), 0.1f));
 
 		Vector3 startPos = transform.localPosition;
 		float startTime = Time.time;
@@ -286,7 +286,7 @@ public class Humanoid : Entity {
 		Vector3 lookAtPos = target.transform.localPosition + Vector3.up * 0.5f;
 
 		// turn player towards target
-		StartCoroutine(TurnToLookAt( new Vector3(lookAtPos.x, 0, lookAtPos.z), 0.25f));
+		StartCoroutine(TurnToLookAt( new Vector3(lookAtPos.x, transform.localPosition.y, lookAtPos.z), 0.25f));
 
 		// set camera to aiming mode
 		cam.SetAimingMode(lookFromPos, lookAtPos);

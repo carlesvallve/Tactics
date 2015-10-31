@@ -2,11 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
-public class GameContainers {
-	public Transform grid;
-	public Transform fx;
-}
 
 /*
 
@@ -49,7 +44,8 @@ public class Game : MonoBehaviour {
 	public static GameContainers containers;
 
 	public GameContainers gameContainers = new GameContainers();
-	public GameObject squadPrefab;
+	public GamePrefabs prefabs = new GamePrefabs();
+	//public GameObject squadPrefab;
 	
 	private Hud hud;
 	private MapGenerator map;
@@ -155,7 +151,7 @@ public class Game : MonoBehaviour {
 
 
 	private Squad CreateSquad(int maxPlayers, Vector3 pos, int radius, Color color) {
-		GameObject obj = (GameObject)Instantiate(squadPrefab);
+		GameObject obj = (GameObject)Instantiate(prefabs.squad);
 		obj.transform.SetParent(containers.grid);
 		obj.name = "Squad";
 

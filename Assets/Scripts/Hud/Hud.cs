@@ -4,14 +4,15 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Hud : MonoBehaviour {
+	public HudPrefabs prefabs = new HudPrefabs();
 
-	public GameObject enemyIconPrefab;
 	private List<GameObject> enemyIcons;
 	private List<Player> visibleEnemies;
 	private int currentEnemyIcon;
 
 	private Game game;
 	private Transform header;
+	
 
 	public void Init (Game game) {
 		this.game = game;
@@ -41,7 +42,7 @@ public class Hud : MonoBehaviour {
 		for (int i = 0; i < visibleEnemies.Count; i ++) {
 			Player enemy = visibleEnemies[i];
 
-			GameObject obj = (GameObject)Instantiate(enemyIconPrefab);
+			GameObject obj = (GameObject)Instantiate(prefabs.enemyIcon);
 			obj.transform.SetParent(header);
 			obj.transform.localScale = new Vector3(1, 1, 1);
 			obj.name = "EnemyIcon";
