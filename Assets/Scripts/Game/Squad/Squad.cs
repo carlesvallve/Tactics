@@ -73,7 +73,10 @@ public class Squad : MonoBehaviour {
 			if (hit.transform.gameObject.tag == "Player") {
 				ok = false;
 			} else {
-				pos = new Vector3(pos.x, hit.point.y, pos.z);
+
+				float y = 0;
+				if (hit.transform.tag == "Grid") { y = hit.point.y; }
+				pos = new Vector3(pos.x, y, pos.z);
 			}
 
 			

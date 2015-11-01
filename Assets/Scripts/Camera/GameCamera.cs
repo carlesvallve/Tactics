@@ -190,7 +190,7 @@ public class GameCamera : MonoBehaviour {
 		Quaternion endRot = Quaternion.LookRotation(forward);
 		
 		// get end fov
-		float endFov = 50;
+		float endFov = 35;
 
 		float duration = 1.5f;
 		float t = 0;

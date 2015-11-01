@@ -32,7 +32,7 @@ public class Utilities : MonoBehaviour {
 
 	// return a hit from a casted ray from start to end points in a maximum distance
 	
-	public static RaycastHit SetRay(Vector3 startPoint, Vector3 endPoint, float distance) {
+	public static RaycastHit SetRay(Vector3 startPoint, Vector3 endPoint, float distance, int layerMask = -1) {
 
 		//get direction vector
 		Vector3 direction = (endPoint - startPoint).normalized;
@@ -44,7 +44,7 @@ public class Utilities : MonoBehaviour {
 		//check if we hitted something
 		Color color;
 
-		if (Physics.Raycast(ray, out hit, distance)) { //, colliderLayer
+		if (Physics.Raycast(ray, out hit, distance, layerMask)) { //, colliderLayer
 			color = Color.green;
 			if (LayerMask.LayerToName(hit.transform.gameObject.layer) != "Avatar") {
 				color = Color.red;

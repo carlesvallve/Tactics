@@ -5,6 +5,12 @@ using System.Collections.Generic;
 
 /*
 
+- 1. get map mesh bounds
+- 2. stretch floor to bounds
+- 3. generate grid adapted to bounds
+- 4. generate walkability depending on y distance to adjacent cells
+- 5. raycast to locate players always on terrain
+
 - reimplement shield logic: 
 	- each player has 4 shields in direction
 	- shields are calculated on goal tile and displayed accordingly
@@ -52,6 +58,8 @@ public class Game : MonoBehaviour {
 	private List<Squad> squads;
 	private int currentSquadNum;
 	public Squad currentSquad { get; private set; }
+
+	//public LayerMask layerMask;
 
 
 	void Awake () {
@@ -124,7 +132,7 @@ public class Game : MonoBehaviour {
 			for (int x = 0; x < map.width - 0; x++) {
 				Vector3 startPoint = new Vector3(x, 10, y);
 				Vector3 endPoint = new Vector3(x, 0, y);
-				RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
+				RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10,  LayerMask.NameToLayer("Grid"));
 				bool walkable = hit.point.y == 0;
 				Grid.SetWalkable((float)x, (float)y, walkable);
 			}

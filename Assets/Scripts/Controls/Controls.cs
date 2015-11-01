@@ -39,9 +39,9 @@ public class Controls : MonoBehaviour {
 			Game.instance.currentSquad.currentPlayer.StopAiming();
 		}
 
-		if (cam.mode != CameraMode.Normal) {
+		/*if (cam.mode != CameraMode.Normal) {
 			return;
-		}
+		}*/
 
 		// game
 		if (Input.GetKeyDown(KeyCode.Return)) {
@@ -146,7 +146,7 @@ public class Controls : MonoBehaviour {
 
 
 	private void TapOnPlayer (RaycastHit hit) {
-		Player player = hit.transform.parent.GetComponent<Player>();
+		Player player = hit.transform.GetComponent<Player>();
 		
 		if (player.squad == game.currentSquad) {
 			if (cam.mode != CameraMode.Normal) { return; }

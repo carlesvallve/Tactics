@@ -17,9 +17,9 @@ public class PathDot : MonoBehaviour {
 
 
 	private void SetPosition (Vector3 pos) {
-		Vector3 startPoint = new Vector3(pos.x, 10, pos.z);
-		Vector3 endPoint = new Vector3(pos.x, 0, pos.z);
-		RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 10);
+		Vector3 startPoint = new Vector3(pos.x, pos.y + 0.3f, pos.z);
+		Vector3 endPoint = new Vector3(pos.x, pos.y, pos.z);
+		RaycastHit hit = Utilities.SetRay(startPoint, endPoint, 0.3f);
 		
 		transform.localPosition = new Vector3(pos.x, hit.point.y, pos.z);
 	}
