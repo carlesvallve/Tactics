@@ -80,6 +80,10 @@ public class Humanoid : Entity {
 		if (OnVisionUpdated != null) {
 			OnVisionUpdated.Invoke();
 		}
+
+		if (GameCamera.instance.mode == CameraMode.Aiming) {
+			Hud.instance.SelectNextEnemyIcon();
+		}
 	}
 
 
@@ -98,8 +102,6 @@ public class Humanoid : Entity {
 
 	public void SetPath (Vector3 pos) {
 		if (moving) { return; }
-
-		print ("setting path...");
 
 		if (path.Count > 0) {
 			Vector3 goal = new Vector3(path[path.Count -1].x, 0, path[path.Count -1].y);
