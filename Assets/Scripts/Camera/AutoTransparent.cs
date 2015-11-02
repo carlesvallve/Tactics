@@ -6,7 +6,7 @@ public class AutoTransparent : MonoBehaviour {
 	private Shader m_OldShader = null;
 	private Color m_OldColor = Color.black;
 	private float m_Transparency = 1f;// 0.1f
-	private const float m_TargetTransparency = 0.25f;
+	private const float m_TargetTransparency = 0.2f;
 	private const float m_FallOff = 0.5f; // returns to 100% in m_FallOff seconds
 
 
