@@ -7,7 +7,7 @@ public class ClearSight : MonoBehaviour {
 
 
 	void Start () {
-		Transform mapContainer = GameObject.Find("3ds file").transform;
+		/*Transform mapContainer = GameObject.Find("3ds file").transform;
 		Renderer[] renderers = mapContainer.GetComponentsInChildren<Renderer>();
 		
 		foreach (Renderer renderer in renderers) {
@@ -16,10 +16,10 @@ public class ClearSight : MonoBehaviour {
 				Material material = materialsList[i];
 				material.shader = Shader.Find("Custom/Overdraw");
 			}
-		}
+		}*/
 	}
 
-	/*void Update() {
+	void Update() {
 
 		Transform mapContainer = GameObject.Find("3ds file").transform;
 		Renderer[] renderers = mapContainer.GetComponentsInChildren<Renderer>();
@@ -60,21 +60,9 @@ public class ClearSight : MonoBehaviour {
 			 AT.BeTransparent(); // get called every frame to reset the falloff
 
 		 }
-	 }*/
+	 }
 
 
-	 /*void Update () {
-	 	Transform mapContainer = GameObject.Find("3ds file").transform;
-
-		Renderer[] renderers = mapContainer.GetComponentsInChildren<Renderer>();
-		foreach (Renderer renderer in renderers) {
-
-			Material[] materialsList = renderer.materials;
-			for (int i = 0; i < materialsList.Length; i++) {
-				Material material = materialsList[i];
-				material.shader = Shader.Find("Custom/Overdraw");
-			}
-		}
-	 }*/
+	 
  }
 

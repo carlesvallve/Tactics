@@ -37,13 +37,13 @@ public class Humanoid : Entity {
 
 		renderers = body.GetComponentsInChildren<Renderer>();
 		//Renderer[] renderers = mapContianer.GetComponentsInChildren<Renderer>();
-		foreach (Renderer renderer in renderers) {
+		/*foreach (Renderer renderer in renderers) {
 			Material[] materialsList = renderer.materials;
 			for (int i = 0; i < materialsList.Length; i++) {
 				Material material = materialsList[i];
 				material.shader = Shader.Find("Custom/Overdraw");
 			}
-		}
+		}*/
 
 		this.squad = squad;
 		this.num = num;

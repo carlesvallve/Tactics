@@ -21,6 +21,7 @@ public class AutoTransparent : MonoBehaviour
          m_OldShader = GetComponent<Renderer>().material.shader;
          m_OldColor  = GetComponent<Renderer>().material.color;
          GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
+         //GetComponent<Renderer>().material.shader = Shader.Find("Custom/TransparentDiffuseWithShadow");
      }
  }
  void Update()
