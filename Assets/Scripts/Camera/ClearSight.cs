@@ -20,45 +20,28 @@ public class ClearSight : MonoBehaviour {
 	}*/
 
 	void Update() {
-
-		/*Transform mapContainer = GameObject.Find("3ds file").transform;
-		Renderer[] renderers = mapContainer.GetComponentsInChildren<Renderer>();
-		foreach (Renderer renderer in renderers) {
-			renderer.enabled = true;
-		}*/
-
+		// get parameters from camera to player to execute the raycast
 		Player player = Game.instance.currentSquad.currentPlayer;
 		Vector3 startPos = Camera.main.transform.localPosition;
 		Vector3 endPos = player.transform.localPosition + Vector3.up * 1f;
 		Vector3 dir =  (endPos - startPos).normalized;
         float dist = Vector3.Distance(endPos, startPos);
 
-		RaycastHit[] hits;
-		// you can also use CapsuleCastAll()
-		// TODO: setup your layermask it improve performance and filter your hits.
-		hits = Physics.RaycastAll(startPos, dir, dist, layerMask);
+        // execute raycast
+		RaycastHit[] hits; // you can also use CapsuleCastAll()
+		hits = Physics.RaycastAll(transform.position, dir, dist, layerMask);
+
 		foreach(RaycastHit hit in hits) {
-			//if (hit.transform == null) { continue; }
 
-			//if (hit.transform.tag == "Map") {
 			Renderer R = hit.collider.GetComponent<Renderer>();
-			if (R == null) {
-				continue; // no renderer attached? go to next hit
-			}
-			// TODO: maybe implement here a check for GOs that should not be affected like the player
-			if (hit.transform.tag == "Player") {
-				break;
-			}
-			//R.enabled = false;
-			//}
-		
+			if (R == null) { continue; } // escape if hit has no renderer
+			if (hit.transform.tag == "Player") { break; } // escape if we arrived to the camera target
 			
-			 AutoTransparent AT = R.GetComponent<AutoTransparent>();
-			 if (AT == null) { // if no script is attached, attach one
-				 AT = R.gameObject.AddComponent<AutoTransparent>();
-			 }
-
-			 AT.BeTransparent(); // get called every frame to reset the falloff
+			// get autotransparent component and execute it
+			// if no script is attached, attach one
+			AutoTransparent AT = R.GetComponent<AutoTransparent>();
+			if (AT == null) { AT = R.gameObject.AddComponent<AutoTransparent>(); } 
+			AT.BeTransparent(); // get called every frame to reset the falloff
 		 }
 	 }
 

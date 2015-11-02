@@ -6,7 +6,7 @@ public class AutoTransparent : MonoBehaviour {
 	private Shader m_OldShader = null;
 	private Color m_OldColor = Color.black;
 	private float m_Transparency = 1f;// 0.1f
-	private const float m_TargetTransparency = 0.15f;
+	private const float m_TargetTransparency = 0.25f;
 	private const float m_FallOff = 0.5f; // returns to 100% in m_FallOff seconds
 
 
@@ -17,8 +17,7 @@ public class AutoTransparent : MonoBehaviour {
 			// Save the current shader
 			m_OldShader = GetComponent<Renderer>().material.shader;
 			m_OldColor  = GetComponent<Renderer>().material.color;
-			//GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
-			GetComponent<Renderer>().material.shader = Shader.Find("Custom/TransparentDiffuseWithShadow");
+			GetComponent<Renderer>().material.shader = Shader.Find("Transparent/Diffuse");
 		}
 	}
 
@@ -35,7 +34,7 @@ public class AutoTransparent : MonoBehaviour {
 			// And remove this script
 			//Destroy(this, m_FallOff);
 		}
-		
+
 		m_Transparency += ((1.0f-m_TargetTransparency)*Time.deltaTime) / m_FallOff;
 	}
 
