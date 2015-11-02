@@ -34,7 +34,16 @@ public class Humanoid : Entity {
 		body = transform.Find("soldierNoScript").gameObject;
 		anim = body.GetComponent<Animation>();
 		//material = body.GetComponent<Renderer>().material;
+
 		renderers = body.GetComponentsInChildren<Renderer>();
+		//Renderer[] renderers = mapContianer.GetComponentsInChildren<Renderer>();
+		foreach (Renderer renderer in renderers) {
+			Material[] materialsList = renderer.materials;
+			for (int i = 0; i < materialsList.Length; i++) {
+				Material material = materialsList[i];
+				material.shader = Shader.Find("Custom/Overdraw");
+			}
+		}
 
 		this.squad = squad;
 		this.num = num;
@@ -49,6 +58,8 @@ public class Humanoid : Entity {
 		path = new List<Vector2>();
 		pathRenderer.SetShieldsAtPos(transform.localPosition, color);
 		SetCover();
+
+
 	}
 
 
